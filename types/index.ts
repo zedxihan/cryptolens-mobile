@@ -7,3 +7,17 @@ export interface TabItem {
   label: string;
   route?: Href;
 }
+
+export interface ActionButtonProps {
+  icon: React.ElementType;
+  label: string;
+  url: string;
+  color: string;
+  onClose: () => void;
+}
+
+export interface MobileDrawerProps {
+  isVisible: boolean;
+  onClose: () => void;
+  onAction: (type: string) => void;
+}
