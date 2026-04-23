@@ -4,6 +4,12 @@ module.exports = {
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
+      fontFamily: {
+        pregular: ['Poppins_400Regular'],
+        pmedium: ['Poppins_500Medium'],
+        psemibold: ['Poppins_600SemiBold'],
+        pbold: ['Poppins_700Bold'],
+      },
       colors: {
         bg: '#060c0a',
         surface: '#030805',

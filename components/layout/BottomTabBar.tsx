@@ -59,7 +59,7 @@ export default function BottomTabBar() {
                 <Icon size={20} color={isActive ? '#ffffff' : '#6b7280'} />
               </View>
               <Text
-                className={`font-Poppins_500Medium absolute bottom-1.5 text-[10px] ${
+                className={`absolute bottom-1.5 font-pmedium text-[10px] ${
                   isActive ? 'text-white' : 'translate-y-1 text-muted opacity-0'
                 }`}
               >
