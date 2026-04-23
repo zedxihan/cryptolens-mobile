@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Image,
   Keyboard,
-  Linking,
   Pressable,
   Text,
   TextInput,
@@ -11,7 +10,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import logo from '../../assets/logo.png';
-import ComingSoonPopup from '../ui/ComingSoonPopup';
 import MobileDrawer from './MobileDrawer';
 
 export default function Topbar() {
@@ -20,7 +18,6 @@ export default function Topbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [comingSoon, setComingSoon] = useState<string | null>(null);
 
   const searchInputRef = useRef<TextInput>(null);
 
@@ -32,16 +29,6 @@ export default function Topbar() {
       setQuery('');
     }
   }, [isSearchOpen]);
-
-  const handleAction = (type: string) => {
-    setIsMenuOpen(false);
-    if (type === 'mail') {
-      Linking.openURL('mailto:support@cryptolens.link');
-    } else {
-      setComingSoon(type);
-      setTimeout(() => setComingSoon(null), 1500);
-    }
-  };
 
   return (
     <View className="z-50 w-full px-3" style={{ paddingTop: insets.top + 10 }}>
@@ -55,7 +42,7 @@ export default function Topbar() {
               onChangeText={setQuery}
               placeholder="Search coins..."
               placeholderTextColor="#86a79b"
-              className="font-regular h-full flex-1 p-0 text-sm text-text"
+              className="h-full flex-1 p-0 font-pregular text-sm text-text"
               returnKeyType="search"
             />
             <Pressable onPress={() => setIsSearchOpen(false)} className="p-1">
@@ -71,7 +58,7 @@ export default function Topbar() {
                 alt="Logo"
                 resizeMode="contain"
               />
-              <Text className="text-xl font-semibold tracking-tight text-text">
+              <Text className="font-pbold text-lg tracking-tight text-text">
                 CryptoLens
               </Text>
             </View>
@@ -91,10 +78,7 @@ export default function Topbar() {
       <MobileDrawer
         isVisible={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        onAction={handleAction}
       />
-
-      <ComingSoonPopup label={comingSoon} isVisible={!!comingSoon} />
     </View>
   );
 }

@@ -50,7 +50,7 @@ export default function ComingSoonPopup({
         style={{ opacity, transform: [{ scale }] }}
         className="mx-auto rounded-full border border-border/70 bg-surface px-4 py-2 shadow-lg"
       >
-        <Text className="text-center font-medium text-xs tracking-wide">
+        <Text className="text-center font-pmedium text-xs tracking-wide">
           <Text className="text-white">{label}</Text>{' '}
           <Text className="text-muted">Coming Soon</Text>
         </Text>

@@ -5,10 +5,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        regular: ['Poppins_400Regular'],
-        medium: ['Poppins_500Medium'],
-        semibold: ['Poppins_600SemiBold'],
-        bold: ['Poppins_700Bold'],
+        pregular: ['Poppins_400Regular'],
+        pmedium: ['Poppins_500Medium'],
+        psemibold: ['Poppins_600SemiBold'],
+        pbold: ['Poppins_700Bold'],
       },
       colors: {
         bg: '#060c0a',
