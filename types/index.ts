@@ -13,11 +13,13 @@ export interface ActionButtonProps {
   label: string;
   url: string;
   color: string;
+  activeColor: string;
+  className?: string;
+  textClassName?: string;
   onClose: () => void;
 }
 
 export interface MobileDrawerProps {
   isVisible: boolean;
   onClose: () => void;
-  onAction: (type: string) => void;
 }
