@@ -11,9 +11,8 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
+  undefined,
+
   (error) => {
     if (error.response) {
       console.error(
@@ -28,3 +27,8 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export async function fetchGet<T>(url: string): Promise<T> {
+  const response = await apiClient.get<T>(url);
+  return response.data;
+}
