@@ -1,0 +1,108 @@
+import { BinanceTicker, RawBinanceTicker } from './types';
+import { connectWs, isWsConnected, liveMarketCache } from './ws';
+import { fetchGet } from '../core/client';
+import { formatTicker } from '../core/marketUtils';
+
+const STABLECOINS = new Set([
+  'USDC',
+  'USDP',
+  'TUSD',
+  'PAX',
+  'DAI',
+  'EUR',
+  'GBP',
+  'FDUSD',
+  'USD1',
+]);
+const validPair = (s: string) =>
+  s.endsWith('USDT') && !STABLECOINS.has(s.replace('USDT', ''));
+
+// core fetch & cache
+let initialFetch: Promise<BinanceTicker[]> | null = null;
+
+export async function fetchMarketData(): Promise<BinanceTicker[]> {
+  if (!isWsConnected()) connectWs();
+
+  if (liveMarketCache.size > 50) return Array.from(liveMarketCache.values());
+
+  if (!initialFetch) {
+    initialFetch = (async () => {
+      try {
+        const wsData = await fetchGet<RawBinanceTicker[]>(
+          'binance/ticker/24hr',
+        );
+        if (!Array.isArray(wsData)) throw new Error('Invalid API response');
+
+        for (let i = 0, len = wsData.length; i < len; i++) {
+          const { symbol, lastPrice, quoteVolume, priceChangePercent } =
+            wsData[i];
+          if (!liveMarketCache.has(symbol)) {
+            liveMarketCache.set(symbol, {
+              id: symbol,
+              symbol,
+              current_price: +lastPrice,
+              total_volume: +quoteVolume,
+              price_change_percentage_24h: +priceChangePercent,
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Binance REST sync failed. Relying on WS cache.', err);
+      } finally {
+        initialFetch = null;
+      }
+      return Array.from(liveMarketCache.values());
+    })();
+  }
+  return initialFetch;
+}
+
+// generic list
+async function getList(
+  filterFn: (t: BinanceTicker) => boolean,
+  sortFn: (a: BinanceTicker, b: BinanceTicker) => number,
+  limit: number = 4,
+) {
+  const filtered = (await fetchMarketData())
+    .filter(filterFn)
+    .sort(sortFn)
+    .slice(0, limit);
+  return Promise.all(filtered.map(formatTicker));
+}
+
+// popular coins
+export async function getPopularFour() {
+  const POPULAR = ['PAXGUSDT', 'BNBUSDT', 'AVAXUSDT', 'SUIUSDT'];
+
+  const tickers = await getList(
+    (t) => POPULAR.includes(t.symbol),
+    (a, b) => POPULAR.indexOf(a.symbol) - POPULAR.indexOf(b.symbol),
+    4,
+  );
+  const klines = await Promise.all(
+    POPULAR.map((c) =>
+      fetchGet<any[]>(`binance/klines?symbol=${c}&interval=1h&limit=24`),
+    ),
+  );
+  return tickers.map((t, i) => ({
+    ...t,
+    sparkline_in_1d: { price: klines[i].map((k) => +k[4]) }, // k[4] is close price
+  }));
+}
+
+// trending coins
+export const getTrendingCoins = () =>
+  getList(
+    (t) => validPair(t.symbol),
+    (a, b) => b.total_volume - a.total_volume,
+  );
+
+// top gainers
+export const getTopGainers = () =>
+  getList(
+    (t) =>
+      validPair(t.symbol) &&
+      t.total_volume > 1e6 &&
+      t.price_change_percentage_24h > 0,
+    (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h,
+  );

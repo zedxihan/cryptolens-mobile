@@ -1,4 +1,4 @@
-import type { BinanceTicker } from './binance.types';
+import type { BinanceTicker } from './types';
 
 export const liveMarketCache = new Map<string, BinanceTicker>();
 
@@ -15,7 +15,7 @@ const resetHeartbeat = () => {
   heartbeatTimer = setTimeout(() => ws?.close(), 5000);
 };
 
-export function startBinanceTickerStream() {
+export function connectWs() {
   if ((ws && ws?.readyState <= WebSocket.OPEN) || reconnectAttempts >= 5)
     return;
 
@@ -63,12 +63,12 @@ export function startBinanceTickerStream() {
       console.log(
         `🛑 WS Closed. Reconnecting in ${delay / 1000}s (Attempt ${reconnectAttempts}/5)`,
       );
-      setTimeout(startBinanceTickerStream, delay);
+      setTimeout(connectWs, delay);
     }
   };
 }
 
-export const stopBinanceTickerStream = () => {
+export const disconnectWs = () => {
   intentionalClose = true;
   if (heartbeatTimer) clearTimeout(heartbeatTimer);
   ws?.close();
