@@ -1,4 +1,4 @@
-import { fetchGet } from './client';
+import { fetchGet } from '../core/client';
 import type {
   Coin,
   DashboardData,
@@ -6,7 +6,7 @@ import type {
   RawCoinRes,
   RawGlobalRes,
   RawSearchRes,
-} from './coingecko.types';
+} from './types';
 
 // stats, chart, dominance
 export async function getDashboardData(
