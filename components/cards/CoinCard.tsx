@@ -1,0 +1,57 @@
+import { FormattedTicker } from '@/services/binance/types';
+import { formatPrice } from '@/utils/format';
+import { ChevronDown, ChevronUp } from 'lucide-react-native';
+import { Image, Text, View } from 'react-native';
+import { SparklineCell } from '../ui/Sparkline';
+
+interface CoinCardProps {
+  coin: FormattedTicker;
+}
+
+export default function CoinCard({ coin }: CoinCardProps) {
+  const change = Number(coin.price_change_percentage_24h ?? 0);
+  const isPositive = change >= 0;
+  const price = formatPrice(coin.current_price);
+  const sparklineData = coin.sparkline_in_1d?.price ?? [];
+
+  return (
+    <View className="rounded-xl border border-border-2 bg-surface-2 p-3">
+      <View className="flex-row items-center justify-between">
+        <View className="flex-1 pr-2">
+          <View className="flex-row items-center gap-1">
+            <Image
+              source={{ uri: coin.image }}
+              className="h-5 w-5 shrink-0 rounded-full"
+            />
+            <Text className="text-md font-pmedium text-text" numberOfLines={1}>
+              {coin.name}
+            </Text>
+          </View>
+
+          <Text className="text-md mt-0.5 font-pmedium text-text">{price}</Text>
+
+          <View className="flex-row items-center">
+            {isPositive ? (
+              <ChevronUp size={20} color="#22c55e" strokeWidth={3} />
+            ) : (
+              <ChevronDown size={20} color="#ef4444" strokeWidth={3} />
+            )}
+            <Text
+              className={`text-md ml-0.5 font-pmedium ${isPositive ? 'text-price-green' : 'text-price-red'}`}
+            >
+              {Math.abs(change).toFixed(2)}%
+            </Text>
+          </View>
+        </View>
+
+        <View className="w-18 h-12 items-end justify-center">
+          <SparklineCell
+            data={sparklineData}
+            isPositive={isPositive}
+            strokeWidth={1.75}
+          />
+        </View>
+      </View>
+    </View>
+  );
+}
