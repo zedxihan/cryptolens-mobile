@@ -11,7 +11,7 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.response.use(
-  undefined,
+  (response) => response,
 
   (error) => {
     if (error.response) {
