@@ -1,4 +1,4 @@
-import { usePathname, useRouter } from 'expo-router';
+import { type Href, usePathname, useRouter } from 'expo-router';
 import {
   BarChart2,
   Home,
@@ -6,11 +6,18 @@ import {
   PieChart,
   User,
 } from 'lucide-react-native';
+import type { ElementType } from 'react';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { TabItem } from '../../types';
 import ComingSoonPopup from '../ui/ComingSoonPopup';
+
+interface TabItem {
+  id: string;
+  icon: ElementType;
+  label: string;
+  route?: Href;
+}
 
 const TAB_CONFIG: TabItem[] = [
   { id: 'index', icon: Home, label: 'Home', route: '/' },

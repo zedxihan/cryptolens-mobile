@@ -1,8 +1,24 @@
 import { Bug, Heart, Mail, Star, Sun, X } from 'lucide-react-native';
+import type { ElementType } from 'react';
 import { Linking, Pressable, Text, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { ActionButtonProps, MobileDrawerProps } from '../../types';
+
+interface ActionButtonProps {
+  icon: ElementType;
+  label: string;
+  url: string;
+  color: string;
+  activeColor: string;
+  className?: string;
+  textClassName?: string;
+  onClose: () => void;
+}
+
+interface MobileDrawerProps {
+  isVisible: boolean;
+  onClose: () => void;
+}
 
 const ACTION_BTNS = [
   {
