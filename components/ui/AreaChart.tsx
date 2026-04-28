@@ -1,8 +1,8 @@
 import { formatCurrency, formatPrice } from '@/utils/format';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import * as d3 from 'd3-shape';
-import React, { memo, useId, useMemo, useState } from 'react';
-import { PanResponder, StyleSheet, Text, View } from 'react-native';
+import { useId, useMemo, useRef, useState } from 'react';
+import { Animated, PanResponder, Text, View } from 'react-native';
 import Svg, {
   Circle,
   Defs,
@@ -13,9 +13,9 @@ import Svg, {
   Text as SvgText,
 } from 'react-native-svg';
 
-const [H, W, L_CLR, ACC] = [220, 45, '#86a79b', '#29d18b'];
+const [H, YW, L_CLR, ACC] = [220, 45, '#86a79b', '#29d18b'];
 
-export default memo(function AreaChart({
+export default function AreaChart({
   data,
   dataKey = 'price',
   accentColor = ACC,
@@ -24,16 +24,24 @@ export default memo(function AreaChart({
   const [plotW, setPlotW] = useState(0);
   const [hoverX, setHoverX] = useState<number | null>(null);
 
-  const isMcap = dataKey === 'market_cap';
+  const animX = useRef(new Animated.Value(0)).current;
+  const animY = useRef(new Animated.Value(0)).current;
+
+  const isMcap = dataKey === 'market_cap' || dataKey === 'marketCap';
   const fmtV = (v: number) =>
-    isMcap ? formatCurrency(v, { compact: true }) : formatPrice(v);
+    !isFinite(v)
+      ? '$0'
+      : isMcap
+        ? formatCurrency(v, { compact: true })
+        : formatPrice(v);
   const fmtD = (t: number) =>
     new Date(t).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
 
   const engine = useMemo(
-    () => calcEngine(data, dataKey, plotW),
+    () => calcEngine(data, dataKey, plotW, H),
     [data, dataKey, plotW],
   );
+
   const pan = useMemo(
     () =>
       PanResponder.create({
@@ -51,23 +59,42 @@ export default memo(function AreaChart({
     return (
       <View
         className="mt-2 min-h-[220px] flex-1"
-        onLayout={(e) => setPlotW(e.nativeEvent.layout.width - W)}
+        onLayout={(e) => setPlotW(e.nativeEvent.layout.width - YW)}
       />
     );
 
   const active =
     hoverX !== null
-      ? engine.pts.reduce((a, b) =>
-          Math.abs(engine.x(b.t) - hoverX) < Math.abs(engine.x(a.t) - hoverX)
-            ? b
-            : a,
+      ? engine.pts.reduce((p: any, curr: any) =>
+          Math.abs(engine.xSc(curr.t) - hoverX) <
+          Math.abs(engine.xSc(p.t) - hoverX)
+            ? curr
+            : p,
         )
       : null;
+
+  if (active) {
+    Animated.spring(animX, {
+      toValue:
+        engine.xSc(active.t) > plotW / 2
+          ? engine.xSc(active.t) - 150
+          : engine.xSc(active.t) + 12,
+      useNativeDriver: true,
+      speed: 24,
+      bounciness: 0,
+    }).start();
+    Animated.spring(animY, {
+      toValue: Math.min(Math.max(engine.ySc(active.v) - 30, 0), H - 58),
+      useNativeDriver: true,
+      speed: 24,
+      bounciness: 0,
+    }).start();
+  }
 
   return (
     <View className="mt-2 w-full flex-1">
       <View style={{ height: H + 38 }} {...pan.panHandlers}>
-        <Svg width={plotW + W} height={H + 38}>
+        <Svg width={plotW + YW} height={H + 38}>
           <Defs>
             <LinearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
               <Stop offset="5%" stopColor={accentColor} stopOpacity={0.32} />
@@ -84,129 +111,116 @@ export default memo(function AreaChart({
             strokeLinejoin="round"
           />
 
-          {engine.yL.map((lbl, i) => (
+          {engine.yL.map((v: number, i: number) => (
             <SvgText
-              key={i}
+              key={`y-${i}`}
               x={plotW + 5}
-              y={Math.min(Math.max(lbl.y + 4, 11), H - 2)}
+              y={Math.min(Math.max(engine.ySc(v) + 4, 11), H - 2)}
               fill={L_CLR}
               fontSize={11}
-              textAnchor="start"
             >
-              {fmtV(lbl.v)}
+              {fmtV(v)}
             </SvgText>
           ))}
-          {engine.xL.map((lbl, i) => (
+          {engine.xL.map((l: any, i: number) => (
             <SvgText
-              key={i}
-              x={lbl.x}
+              key={`x-${i}`}
+              x={engine.xSc(l.pt.t)}
               y={H + 20}
               fill={L_CLR}
               fontSize={11}
-              textAnchor={lbl.a}
+              textAnchor={l.a}
             >
-              {fmtD(lbl.t)}
+              {fmtD(l.pt.t)}
             </SvgText>
           ))}
-        </Svg>
 
-        {active && (
-          <View pointerEvents="none" style={StyleSheet.absoluteFill}>
-            <Svg style={StyleSheet.absoluteFill}>
+          {active && (
+            <>
               <Line
-                x1={engine.x(active.t)}
-                x2={engine.x(active.t)}
+                x1={engine.xSc(active.t)}
+                x2={engine.xSc(active.t)}
                 y1={0}
                 y2={H}
                 stroke={accentColor}
                 strokeWidth={1}
               />
               <Circle
-                cx={engine.x(active.t)}
-                cy={engine.y(active.v)}
+                cx={engine.xSc(active.t)}
+                cy={engine.ySc(active.v)}
                 r={4}
                 fill={accentColor}
               />
-            </Svg>
-            <View
-              className="absolute min-w-[104px] rounded-lg border border-[rgba(148,255,214,0.18)] bg-surface px-3 py-2 shadow-lg"
-              style={{
-                left: Math.min(
-                  Math.max(engine.x(active.t) - 40, 0),
-                  plotW - 76,
-                ),
-                top: Math.min(Math.max(engine.y(active.v) - 62, 0), H - 58),
-              }}
+            </>
+          )}
+        </Svg>
+
+        {active && (
+          <Animated.View
+            className="absolute min-w-[135px] rounded-lg border border-[rgba(148,255,214,0.18)] bg-surface p-3 shadow-lg"
+            style={{
+              transform: [{ translateX: animX }, { translateY: animY }],
+            }}
+          >
+            <Text className="mb-1 text-xs text-muted">{fmtD(active.t)}</Text>
+            <Text
+              className="text-[13px] font-semibold tabular-nums"
+              style={{ color: accentColor }}
             >
-              <Text className="mb-1 text-xs text-muted">{fmtD(active.t)}</Text>
-              <Text
-                className="text-[13px] font-semibold tabular-nums"
-                style={{ color: accentColor }}
-              >
-                {fmtV(active.v)}
-              </Text>
-            </View>
-          </View>
+              {isMcap ? 'Market Cap : ' : 'Price : '}
+              {fmtV(active.v)}
+            </Text>
+          </Animated.View>
         )}
       </View>
     </View>
   );
-});
+}
 
 // Math Engine
-function calcEngine(data: any[], key: string, w: number) {
+function calcEngine(data: any[], key: string, w: number, h: number) {
   const pts = (data || [])
-    .map((d) => ({ v: Number(d?.[key]), t: Number(d?.timestamp) }))
-    .filter((d) => isFinite(d.v) && d.v > 0)
-    .sort((a, b) => a.t - b.t);
+    .map((d: any) => ({ v: Number(d?.[key]), t: Number(d?.timestamp) }))
+    .filter((d: any) => isFinite(d.v) && d.v > 0);
   if (pts.length < 2 || w <= 0) return null;
+  pts.sort((a, b) => a.t - b.t);
 
-  const [minR, maxR] = [
-    Math.min(...pts.map((p) => p.v)),
-    Math.max(...pts.map((p) => p.v)),
-  ];
-  const tick = (maxR - minR) / 4 || 1;
+  const minV = Math.min(...pts.map((p) => p.v));
+  const maxV = Math.max(...pts.map((p) => p.v));
+
+  const tick = (maxV - minV) / 4 || 1;
   const mag = Math.pow(10, Math.floor(Math.log10(tick)));
   const nice =
     mag * (tick / mag < 1.5 ? 1 : tick / mag < 3 ? 2 : tick / mag < 7 ? 5 : 10);
-  const [yMin, yMax] = [
-    Math.floor(minR / nice) * nice,
-    Math.ceil(maxR / nice) * nice,
-  ];
+  const yMin = Math.floor(minV / nice) * nice;
+  const yMax = Math.ceil(maxV / nice) * nice;
 
-  const scX = scaleTime()
-    .domain([new Date(pts[0].t), new Date(pts[pts.length - 1].t)])
+  const xSc = scaleTime()
+    .domain([pts[0].t, pts[pts.length - 1].t])
     .range([0, w]);
-  const scY = scaleLinear().domain([yMin, yMax]).range([H, 0]);
+  const ySc = scaleLinear().domain([yMin, yMax]).range([h, 0]);
 
-  const x = (t: number) => scX(new Date(t)),
-    y = (v: number) => scY(v);
-  const line =
-    d3
-      .line<any>()
-      .x((d) => x(d.t))
-      .y((d) => y(d.v))
-      .curve(d3.curveMonotoneX)(pts) || '';
-  const area =
-    d3
-      .area<any>()
-      .x((d) => x(d.t))
-      .y0(H)
-      .y1((d) => y(d.v))
-      .curve(d3.curveMonotoneX)(pts) || '';
-
-  const xL = [0, 1, 2, 3, 4].map((i) => {
-    const p = pts[Math.round((i * (pts.length - 1)) / 4)];
-    return {
-      x: x(p.t),
-      t: p.t,
-      a: i === 0 ? 'start' : i === 4 ? 'end' : ('middle' as any),
-    };
-  });
-  const yL = [0, 1, 2, 3, 4].map((i) => ({
-    y: y(yMin + ((yMax - yMin) * i) / 4),
-    v: yMin + ((yMax - yMin) * i) / 4,
-  }));
-
-  return { pts, line, area, x, y, xL, yL };
+  return {
+    pts,
+    xSc,
+    ySc,
+    line:
+      d3
+        .line<any>()
+        .x((d) => xSc(d.t))
+        .y((d) => ySc(d.v))
+        .curve(d3.curveMonotoneX)(pts) || '',
+    area:
+      d3
+        .area<any>()
+        .x((d) => xSc(d.t))
+        .y0(h)
+        .y1((d) => ySc(d.v))
+        .curve(d3.curveMonotoneX)(pts) || '',
+    xL: [0, 1, 2, 3, 4].map((i) => ({
+      pt: pts[Math.round((i * (pts.length - 1)) / 4)],
+      a: i === 0 ? 'start' : i === 4 ? 'end' : ('middle' as const),
+    })),
+    yL: [0, 1, 2, 3, 4].map((i) => yMin + ((yMax - yMin) * i) / 4),
+  };
 }
