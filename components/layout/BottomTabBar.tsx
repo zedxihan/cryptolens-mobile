@@ -45,9 +45,8 @@ export default function BottomTabBar() {
 
   return (
     <View
-      pointerEvents="box-none"
       className="absolute inset-x-0 z-50 w-full items-center justify-center px-4"
-      style={{ bottom: insets.bottom + 12 }}
+      style={{ bottom: insets.bottom + 12, pointerEvents: 'box-none' }}
     >
       <View className="w-full max-w-md flex-row items-center justify-between gap-1.5 rounded-2xl border border-border-2 bg-surface/95 px-3 py-1.5 shadow-lg">
         {TAB_CONFIG.map((item) => {

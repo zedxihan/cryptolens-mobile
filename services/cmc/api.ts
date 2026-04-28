@@ -1,5 +1,5 @@
 import { fetchGet } from '../core/client';
-import { FearGreedIndex, CMCFearGreedData } from './types';
+import type { CMCFearGreedData, FearGreedIndex } from './types';
 
 export async function getFearGreedIndex(): Promise<FearGreedIndex | null> {
   const response = await fetchGet<{

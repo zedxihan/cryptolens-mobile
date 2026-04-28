@@ -1,7 +1,7 @@
-import { BinanceTicker, RawBinanceTicker } from './types';
-import { connectWs, isWsConnected, liveMarketCache } from './ws';
 import { fetchGet } from '../core/client';
-import { formatTicker } from '../core/marketUtils';
+import { getCoinIcon } from '../coingecko/api';
+import type { BinanceTicker, FormattedTicker, RawBinanceTicker } from './types';
+import { connectWs, isWsConnected, liveMarketCache } from './ws';
 
 const STABLECOINS = new Set([
   'USDC',
@@ -16,6 +16,21 @@ const STABLECOINS = new Set([
 ]);
 const validPair = (s: string) =>
   s.endsWith('USDT') && !STABLECOINS.has(s.replace('USDT', ''));
+
+// formatter
+export async function formatTicker(t: BinanceTicker): Promise<FormattedTicker> {
+  const name = t.symbol.replace('USDT', '');
+  return {
+    id: t.symbol,
+    symbol: name.toLowerCase(),
+    name,
+    current_price: t.current_price,
+    price_change_percentage_24h: t.price_change_percentage_24h,
+    total_volume: t.total_volume,
+    market_cap: null,
+    image: await getCoinIcon(name),
+  };
+}
 
 // core fetch & cache
 let initialFetch: Promise<BinanceTicker[]> | null = null;
