@@ -1,4 +1,5 @@
 import CoinCard from '@/components/cards/CoinCard';
+import GlobalMcapChart from '@/components/charts/GlobalMcapChart';
 import { useHomeCoinsQuery } from '@/services/binance/queries';
 
 import { ActivityIndicator, ScrollView, View } from 'react-native';
@@ -19,7 +20,7 @@ export default function HomeScreen() {
   return (
     <View className="flex-1 bg-surface">
       <ScrollView className="flex-1 pt-3">
-        <View className="mb-6">
+        <View className="mb-3">
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -38,6 +39,9 @@ export default function HomeScreen() {
         </View>
 
         {/* Others */}
+        <View className="px-3 pb-6">
+          <GlobalMcapChart />
+        </View>
       </ScrollView>
     </View>
   );
