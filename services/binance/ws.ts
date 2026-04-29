@@ -34,22 +34,22 @@ export function connectWs() {
       const ticks = JSON.parse(data);
       if (!Array.isArray(ticks)) return;
 
-      for (const { s, c, q } of ticks) {
+      for (const { s, c, q, o } of ticks) {
         if (!s.endsWith('USDT')) continue;
-        const cached = liveMarketCache.get(s);
 
-        if (cached) {
-          cached.current_price = +c;
-          cached.total_volume = +q;
-        } else {
-          liveMarketCache.set(s, {
-            id: s,
-            symbol: s,
-            current_price: +c,
-            total_volume: +q,
-            price_change_percentage_24h: 0,
-          });
-        }
+        const currentPrice = +c,
+          openPrice = +o,
+          volume = +q;
+        const cached = liveMarketCache.get(s);
+        const ticker = cached ?? ({ id: s, symbol: s } as BinanceTicker);
+
+        ticker.current_price = currentPrice;
+        ticker.total_volume = volume;
+        ticker.price_change_percentage_24h = openPrice
+          ? ((currentPrice - openPrice) / openPrice) * 100
+          : 0;
+
+        if (!cached) liveMarketCache.set(s, ticker);
       }
     } catch {} // ignore
   };

@@ -17,6 +17,7 @@ export const useHomeCoinsQuery = () => {
         popular: popular ?? [],
       };
     },
-    refetchInterval: 30000,
+    refetchInterval: 1000,
+    staleTime: 0,
   });
 };

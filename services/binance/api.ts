@@ -1,5 +1,5 @@
-import { fetchGet } from '../core/client';
 import { getCoinIcon } from '../coingecko/api';
+import { fetchGet } from '../core/client';
 import type { BinanceTicker, FormattedTicker, RawBinanceTicker } from './types';
 import { connectWs, isWsConnected, liveMarketCache } from './ws';
 
@@ -43,26 +43,23 @@ export async function fetchMarketData(): Promise<BinanceTicker[]> {
   if (!initialFetch) {
     initialFetch = (async () => {
       try {
-        const wsData = await fetchGet<RawBinanceTicker[]>(
-          'binance/ticker/24hr',
-        );
-        if (!Array.isArray(wsData)) throw new Error('Invalid API response');
+        const data = await fetchGet<RawBinanceTicker[]>('binance/ticker/24hr');
+        if (!Array.isArray(data)) return Array.from(liveMarketCache.values());
 
-        for (let i = 0, len = wsData.length; i < len; i++) {
-          const { symbol, lastPrice, quoteVolume, priceChangePercent } =
-            wsData[i];
-          if (!liveMarketCache.has(symbol)) {
-            liveMarketCache.set(symbol, {
-              id: symbol,
-              symbol,
-              current_price: +lastPrice,
-              total_volume: +quoteVolume,
-              price_change_percentage_24h: +priceChangePercent,
-            });
-          }
+        // prettier-ignore
+        for (const { symbol, lastPrice, quoteVolume, priceChangePercent } of data) {
+          if (!liveMarketCache.has(symbol)) continue;
+
+          liveMarketCache.set(symbol, {
+            id: symbol,
+            symbol,
+            current_price: +lastPrice,
+            total_volume: +quoteVolume,
+            price_change_percentage_24h: +priceChangePercent,
+          });
         }
       } catch (err) {
-        console.error('Binance REST sync failed. Relying on WS cache.', err);
+        console.error('Binance REST sync failed:', err);
       } finally {
         initialFetch = null;
       }
