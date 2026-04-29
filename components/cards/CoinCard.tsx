@@ -1,6 +1,7 @@
 import { FormattedTicker } from '@/services/binance/types';
 import { formatPrice } from '@/utils/format';
 import { Image, Text, View } from 'react-native';
+import { PriceChange } from '../ui/PriceChange';
 import { SparklineCell } from '../ui/Sparkline';
 
 interface CoinCardProps {
@@ -8,10 +9,15 @@ interface CoinCardProps {
 }
 
 export default function CoinCard({ coin }: CoinCardProps) {
-  const change = Number(coin.price_change_percentage_24h ?? 0);
-  const isPositive = change >= 0;
-  const price = formatPrice(coin.current_price);
-  const sparklineData = coin.sparkline_in_1d?.price ?? [];
+  const {
+    image,
+    name,
+    current_price,
+    price_change_percentage_24h,
+    sparkline_in_1d,
+  } = coin;
+  const sparklineData = sparkline_in_1d?.price ?? [];
+  const isPositive = price_change_percentage_24h >= 0;
 
   return (
     <View className="border-border-2 bg-surface-2 rounded-xl border p-3">
@@ -19,25 +25,23 @@ export default function CoinCard({ coin }: CoinCardProps) {
         <View className="flex-1 pr-2">
           <View className="flex-row items-center gap-1">
             <Image
-              source={{ uri: coin.image }}
+              source={{ uri: image }}
               className="h-5 w-5 shrink-0 rounded-full"
             />
             <Text className="text-md font-pmedium text-text" numberOfLines={1}>
-              {coin.name}
+              {name}
             </Text>
           </View>
 
-          <Text className="text-md font-pmedium text-text mt-0.5">{price}</Text>
+          <Text className="text-md font-pmedium text-text mt-0.5">
+            {formatPrice(current_price)}
+          </Text>
 
           <View className="flex-row items-center">
-            <Text
-              className={`text-md font-pmedium ml-0.5 ${
-                isPositive ? 'text-price-green' : 'text-price-red'
-              }`}
-            >
-              {change > 0 ? '+' : ''}
-              {change.toFixed(2)}%
-            </Text>
+            <PriceChange
+              value={price_change_percentage_24h}
+              className="text-md ml-0.5"
+            />
           </View>
         </View>
 
