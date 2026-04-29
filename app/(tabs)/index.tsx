@@ -1,4 +1,5 @@
 import CoinCard from '@/components/cards/CoinCard';
+import KPIBox from '@/components/cards/KPIBox';
 import GlobalMcapChart from '@/components/charts/GlobalMcapChart';
 import { useHomeCoinsQuery } from '@/services/binance/queries';
 
@@ -15,12 +16,15 @@ export default function HomeScreen() {
     );
   }
 
-  const { popular = [] } = data || {};
+  const { popular = [], trending = [], gainers = [] } = data || {};
 
   return (
     <View className="flex-1 bg-surface">
-      <ScrollView className="flex-1 pt-3">
-        <View className="mb-3">
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 24, gap: 12, paddingTop: 12 }}
+      >
+        <View>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -39,8 +43,13 @@ export default function HomeScreen() {
         </View>
 
         {/* Others */}
-        <View className="px-3 pb-6">
+        <View className="px-3">
           <GlobalMcapChart />
+        </View>
+
+        <View className="flex-col gap-3 px-3">
+          <KPIBox title="Trending" icon="🔥" coins={trending} />
+          <KPIBox title="Top Gainers" icon="🚀" coins={gainers} />
         </View>
       </ScrollView>
     </View>
