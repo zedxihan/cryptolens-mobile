@@ -10,7 +10,7 @@ export default function HomeScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-surface">
+      <View className="bg-surface flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#22c55e" />
       </View>
     );
@@ -19,7 +19,7 @@ export default function HomeScreen() {
   const { popular = [], trending = [], gainers = [] } = data || {};
 
   return (
-    <View className="flex-1 bg-surface">
+    <View className="bg-surface flex-1">
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 24, gap: 12, paddingTop: 12 }}

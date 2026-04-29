@@ -13,13 +13,13 @@ export default function KPIBox({ title, icon, coins = [] }: KPIBoxProps) {
   const visibleCoins = coins.slice(0, 4);
 
   return (
-    <View className="rounded-xl border border-border-2 bg-surface-2 p-4">
+    <View className="border-border-2 bg-surface-2 rounded-xl border p-4">
       <View className="mb-4 flex-row items-center justify-between">
-        <Text className="font-psemibold text-lg text-text">
+        <Text className="font-psemibold text-text text-lg">
           {icon} {title}
         </Text>
         <Pressable disabled className="active:opacity-70 disabled:opacity-50">
-          <Text className="font-pmedium text-sm text-muted">View more →</Text>
+          <Text className="font-pmedium text-muted text-sm">View more →</Text>
         </Pressable>
       </View>
 
@@ -54,7 +54,7 @@ export default function KPIBox({ title, icon, coins = [] }: KPIBoxProps) {
                 </Text>
 
                 <Text
-                  className={`text-md ml-0.5 font-pmedium ${
+                  className={`text-md font-pmedium ml-0.5 ${
                     isPositive ? 'text-price-green' : 'text-price-red'
                   }`}
                 >

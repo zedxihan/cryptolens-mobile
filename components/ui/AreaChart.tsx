@@ -157,12 +157,12 @@ export default function AreaChart({
 
         {active && (
           <Animated.View
-            className="absolute min-w-[135px] rounded-lg border border-[rgba(148,255,214,0.18)] bg-surface p-3 shadow-lg"
+            className="bg-surface absolute min-w-[135px] rounded-lg border border-[rgba(148,255,214,0.18)] p-3 shadow-lg"
             style={{
               transform: [{ translateX: animX }, { translateY: animY }],
             }}
           >
-            <Text className="mb-1 text-xs text-muted">{fmtD(active.t)}</Text>
+            <Text className="text-muted mb-1 text-xs">{fmtD(active.t)}</Text>
             <Text
               className="text-[13px] font-semibold tabular-nums"
               style={{ color: accentColor }}

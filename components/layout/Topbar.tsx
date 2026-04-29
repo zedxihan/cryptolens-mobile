@@ -32,7 +32,7 @@ export default function Topbar() {
 
   return (
     <View className="z-50 w-full px-3" style={{ paddingTop: insets.top + 10 }}>
-      <View className="flex-row items-center justify-between rounded-2xl border border-border-2 bg-surface-2 px-4 py-3 shadow-xs">
+      <View className="border-border-2 bg-surface-2 flex-row items-center justify-between rounded-2xl border px-4 py-3 shadow-xs">
         {isSearchOpen ? (
           <View className="flex-1 flex-row items-center gap-2">
             <Search size={20} color="#86a79b" />
@@ -42,7 +42,7 @@ export default function Topbar() {
               onChangeText={setQuery}
               placeholder="Search coins..."
               placeholderTextColor="#86a79b"
-              className="h-full flex-1 p-0 font-pregular text-sm text-text"
+              className="font-pregular text-text h-full flex-1 p-0 text-sm"
               returnKeyType="search"
             />
             <Pressable onPress={() => setIsSearchOpen(false)} className="p-1">
@@ -58,7 +58,7 @@ export default function Topbar() {
                 alt="Logo"
                 resizeMode="contain"
               />
-              <Text className="font-pbold text-lg tracking-tight text-text">
+              <Text className="font-pbold text-text text-lg tracking-tight">
                 CryptoLens
               </Text>
             </View>
