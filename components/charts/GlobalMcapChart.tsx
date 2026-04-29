@@ -17,9 +17,9 @@ export default function GlobalMcapChart() {
   ];
 
   return (
-    <View className="rounded-2xl border border-border-2 bg-surface-2 p-3.5">
+    <View className="border-border-2 bg-surface-2 rounded-2xl border p-3.5">
       <View className="mb-4 flex-col gap-4">
-        <Text className="font-psemibold text-lg text-text">
+        <Text className="font-psemibold text-text text-lg">
           Global Crypto Market Cap
         </Text>
 
@@ -27,24 +27,24 @@ export default function GlobalMcapChart() {
           <View className="flex-row gap-6">
             {statItems.map((stat, index) => (
               <View key={index}>
-                <Text className="font-pregular text-xs text-muted">
+                <Text className="font-pregular text-muted text-xs">
                   {stat.label}
                 </Text>
-                <Text className="mt-1 font-psemibold text-xl text-text">
+                <Text className="font-psemibold text-text mt-1 text-xl">
                   {formatCurrency(stat.value)}
                 </Text>
               </View>
             ))}
           </View>
 
-          <View className="flex-row rounded-lg border border-border-2 bg-surface p-1">
+          <View className="border-border-2 bg-surface flex-row rounded-lg border p-1">
             {['7', '30', '365'].map((tf) => {
               const isActive = timeframe === tf;
               return (
                 <TouchableOpacity
                   key={tf}
                   onPress={() => setTimeframe(tf)}
-                  className={`rounded-md px-3 py-1.5 ${isActive ? 'border border-border-2 bg-[rgba(255,255,255,0.10)]' : ''}`}
+                  className={`rounded-md px-3 py-1.5 ${isActive ? 'border-border-2 border bg-[rgba(255,255,255,0.10)]' : ''}`}
                 >
                   <Text
                     className={`font-pmedium text-xs ${isActive ? 'text-text' : 'text-muted'}`}
@@ -66,8 +66,8 @@ export default function GlobalMcapChart() {
         )}
       </View>
 
-      <View className="mt-2 items-end border-t border-border-2 pt-2">
-        <Text className="font-pregular text-xs text-muted">by CoinGecko</Text>
+      <View className="border-border-2 mt-2 items-end border-t pt-2">
+        <Text className="font-pregular text-muted text-xs">by CoinGecko</Text>
       </View>
     </View>
   );

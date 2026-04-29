@@ -1,3 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css';
+
+@import 'nativewind/theme';
+
+@theme {
+  --font-pregular: Poppins_400Regular;
+  --font-pmedium: Poppins_500Medium;
+  --font-psemibold: Poppins_600SemiBold;
+  --font-pbold: Poppins_700Bold;
+
+  --color-bg: #060c0a;
+  --color-surface: #030805;
+  --color-surface-2: #0e0e0e;
+  --color-sidebar: #010201;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-2: rgba(255, 255, 255, 0.04);
+  --color-text: #d8f1e7;
+  --color-muted: #86a79b;
+  --color-muted-2: #5f7d73;
+  --color-accent: #29d18b;
+  --color-accent-2: #18a76d;
+  --color-price-green: #00a83e;
+  --color-price-red: #ff3a33;
+}

@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "CryptoLens",
-    "slug": "CryptoLens",
-    "version": "0.2.0",
+    "slug": "cryptolens-mobile",
+    "version": "0.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "cryptolens",

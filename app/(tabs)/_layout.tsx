@@ -15,7 +15,7 @@ configureReanimatedLogger({
 
 export default function TabLayout() {
   return (
-    <View className="flex-1 bg-bg">
+    <View className="bg-bg flex-1">
       <Topbar />
       <Tabs
         tabBar={() => <BottomTabBar />}

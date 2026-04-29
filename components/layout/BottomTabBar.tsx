@@ -48,7 +48,7 @@ export default function BottomTabBar() {
       className="absolute inset-x-0 z-50 w-full items-center justify-center px-4"
       style={{ bottom: insets.bottom + 12, pointerEvents: 'box-none' }}
     >
-      <View className="w-full max-w-md flex-row items-center justify-between gap-1.5 rounded-2xl border border-border-2 bg-surface/95 px-3 py-1.5 shadow-lg">
+      <View className="border-border-2 bg-surface/95 w-full max-w-md flex-row items-center justify-between gap-1.5 rounded-2xl border px-3 py-1.5 shadow-lg">
         {TAB_CONFIG.map((item) => {
           const isActive = pathname === item.route;
           const Icon = item.icon;
@@ -65,8 +65,8 @@ export default function BottomTabBar() {
                 <Icon size={20} color={isActive ? '#ffffff' : '#6b7280'} />
               </View>
               <Text
-                className={`absolute bottom-1.5 font-pmedium text-[10px] ${
-                  isActive ? 'text-white' : 'translate-y-1 text-muted opacity-0'
+                className={`font-pmedium absolute bottom-1.5 text-[10px] ${
+                  isActive ? 'text-white' : 'text-muted translate-y-1 opacity-0'
                 }`}
               >
                 {item.label}

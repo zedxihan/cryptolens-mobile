@@ -103,15 +103,15 @@ export default function MobileDrawer({
       backdropOpacity={0.6}
       style={{ margin: 0, flexDirection: 'row', justifyContent: 'flex-end' }}
     >
-      <View className="h-full w-[65vw] border-l border-border-2 bg-surface shadow-2xl">
+      <View className="border-border-2 bg-surface h-full w-[65vw] border-l shadow-2xl">
         <View
-          className="flex-row items-center justify-between border-b border-border-2 px-4 py-3"
+          className="border-border-2 flex-row items-center justify-between border-b px-4 py-3"
           style={{ paddingTop: insets.top }}
         >
-          <Text className="font-psemibold text-lg text-text">Menu</Text>
+          <Text className="font-psemibold text-text text-lg">Menu</Text>
           <Pressable
             onPress={onClose}
-            className="rounded-xl bg-surface-2 p-2 active:bg-white/5"
+            className="bg-surface-2 rounded-xl p-2 active:bg-white/5"
           >
             <X size={20} color="#86a79b" />
           </Pressable>
@@ -123,7 +123,7 @@ export default function MobileDrawer({
             <ActionButton key={item.id} {...item} onClose={onClose} />
           ))}
 
-          <View className="my-1 h-px w-full bg-border-2" />
+          <View className="bg-border-2 my-1 h-px w-full" />
           <View className="mt-1 flex-row items-center justify-between gap-2">
             {BOTTOM_BTNS.map((item) => (
               <Pressable
@@ -132,7 +132,7 @@ export default function MobileDrawer({
                   if (item.url) Linking.openURL(item.url);
                   onClose();
                 }}
-                className="h-14 flex-1 items-center justify-center rounded-xl border border-border-2 bg-surface-2 transition-all active:scale-95 active:bg-white/5"
+                className="border-border-2 bg-surface-2 h-14 flex-1 items-center justify-center rounded-xl border transition-all active:scale-95 active:bg-white/5"
               >
                 <item.icon size={20} color="#86a79b" />
               </Pressable>
