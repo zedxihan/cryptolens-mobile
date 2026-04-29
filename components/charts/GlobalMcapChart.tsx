@@ -17,7 +17,7 @@ export default function GlobalMcapChart() {
   ];
 
   return (
-    <View className="mb-6 rounded-2xl border border-border-2 bg-surface-2 p-4">
+    <View className="rounded-2xl border border-border-2 bg-surface-2 p-3.5">
       <View className="mb-4 flex-col gap-4">
         <Text className="font-psemibold text-lg text-text">
           Global Crypto Market Cap
@@ -58,7 +58,7 @@ export default function GlobalMcapChart() {
         </View>
       </View>
 
-      <View className="h-[260px] w-full justify-center">
+      <View className="h-[250px] w-full justify-center">
         {isLoading ? (
           <ActivityIndicator size="large" color="#29d18b" />
         ) : (
@@ -66,7 +66,7 @@ export default function GlobalMcapChart() {
         )}
       </View>
 
-      <View className="mt-4 items-end border-t border-border-2 pt-2">
+      <View className="mt-2 items-end border-t border-border-2 pt-2">
         <Text className="font-pregular text-xs text-muted">by CoinGecko</Text>
       </View>
     </View>

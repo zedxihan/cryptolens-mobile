@@ -58,7 +58,7 @@ export default function AreaChart({
   if (!engine || plotW <= 0)
     return (
       <View
-        className="mt-2 min-h-[220px] flex-1"
+        className="min-h-[220px] flex-1"
         onLayout={(e) => setPlotW(e.nativeEvent.layout.width - YW)}
       />
     );
@@ -92,9 +92,9 @@ export default function AreaChart({
   }
 
   return (
-    <View className="mt-2 w-full flex-1">
-      <View style={{ height: H + 38 }} {...pan.panHandlers}>
-        <Svg width={plotW + YW} height={H + 38}>
+    <View className="w-full flex-1">
+      <View style={{ height: H + 30 }} {...pan.panHandlers}>
+        <Svg width={plotW + YW} height={H + 30}>
           <Defs>
             <LinearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
               <Stop offset="5%" stopColor={accentColor} stopOpacity={0.32} />

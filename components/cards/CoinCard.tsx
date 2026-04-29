@@ -1,6 +1,5 @@
 import { FormattedTicker } from '@/services/binance/types';
 import { formatPrice } from '@/utils/format';
-import { ChevronDown, ChevronUp } from 'lucide-react-native';
 import { Image, Text, View } from 'react-native';
 import { SparklineCell } from '../ui/Sparkline';
 
@@ -31,15 +30,13 @@ export default function CoinCard({ coin }: CoinCardProps) {
           <Text className="text-md mt-0.5 font-pmedium text-text">{price}</Text>
 
           <View className="flex-row items-center">
-            {isPositive ? (
-              <ChevronUp size={20} color="#22c55e" strokeWidth={3} />
-            ) : (
-              <ChevronDown size={20} color="#ef4444" strokeWidth={3} />
-            )}
             <Text
-              className={`text-md ml-0.5 font-pmedium ${isPositive ? 'text-price-green' : 'text-price-red'}`}
+              className={`text-md ml-0.5 font-pmedium ${
+                isPositive ? 'text-price-green' : 'text-price-red'
+              }`}
             >
-              {Math.abs(change).toFixed(2)}%
+              {change > 0 ? '+' : ''}
+              {change.toFixed(2)}%
             </Text>
           </View>
         </View>
