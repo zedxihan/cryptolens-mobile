@@ -1,82 +1,59 @@
-import { type Href, usePathname, useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import {
   BarChart2,
+  Calendar,
   Home,
-  Newspaper,
   PieChart,
-  User,
+  TrendingUp,
 } from 'lucide-react-native';
-import type { ElementType } from 'react';
-import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ComingSoonPopup from '../ui/ComingSoonPopup';
+import { ExpandableTabs } from '../ui/ExpandableTabs';
 
-interface TabItem {
-  id: string;
-  icon: ElementType;
-  label: string;
-  route?: Href;
-}
-
-const TAB_CONFIG: TabItem[] = [
-  { id: 'index', icon: Home, label: 'Home', route: '/' },
-  { id: 'portfolio', icon: PieChart, label: 'Portfolio' },
-  { id: 'charts', icon: BarChart2, label: 'Charts' },
-  { id: 'news', icon: Newspaper, label: 'News' },
-  { id: 'profile', icon: User, label: 'Profile' },
+const TABS: any[] = [
+  { id: 'index', icon: Home, title: 'Home', route: '/' },
+  { id: 'markets', icon: TrendingUp, title: 'Markets', route: '/markets' },
+  { id: 'charts', icon: BarChart2, title: 'Charts' },
+  { id: 'calendar', icon: Calendar, title: 'Calendar' },
+  { type: 'separator' },
+  { id: 'portfolio', icon: PieChart, title: 'Portfolio' },
 ];
 
 export default function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
+  const [soon, setSoon] = useState<string | null>(null);
 
-  const [comingSoon, setComingSoon] = useState<string | null>(null);
-
-  const handlePress = (item: TabItem) => {
-    if (item.route) {
-      router.push(item.route);
-    } else {
-      setComingSoon(item.label);
-      setTimeout(() => setComingSoon(null), 1500);
+  useEffect(() => {
+    if (soon) {
+      const t = setTimeout(() => setSoon(null), 1500);
+      return () => clearTimeout(t);
     }
+  }, [soon]);
+
+  const onSelect = (id: string) => {
+    const tab = TABS.find((t) => t.id === id);
+    if (tab?.route) router.push(tab.route);
+    else setSoon(tab?.title);
   };
+
+  const activeId = TABS.find((t) => t.route === pathname)?.id || 'index';
 
   return (
     <View
-      className="absolute inset-x-0 z-50 w-full items-center justify-center px-4"
-      style={{ bottom: insets.bottom + 12, pointerEvents: 'box-none' }}
+      className="absolute inset-x-0 z-50 items-center"
+      style={{ bottom: insets.bottom + 25 }}
+      pointerEvents="box-none"
     >
-      <View className="border-border-2 bg-surface/95 w-full max-w-md flex-row items-center justify-between gap-1.5 rounded-2xl border px-3 py-1.5 shadow-lg">
-        {TAB_CONFIG.map((item) => {
-          const isActive = pathname === item.route;
-          const Icon = item.icon;
-
-          return (
-            <Pressable
-              key={item.id}
-              onPress={() => handlePress(item)}
-              className={`relative h-14 flex-1 items-center justify-center rounded-xl p-2 ${
-                isActive ? 'bg-white/10' : ''
-              }`}
-            >
-              <View className={isActive ? '-translate-y-2' : ''}>
-                <Icon size={20} color={isActive ? '#ffffff' : '#6b7280'} />
-              </View>
-              <Text
-                className={`font-pmedium absolute bottom-1.5 text-[10px] ${
-                  isActive ? 'text-white' : 'text-muted translate-y-1 opacity-0'
-                }`}
-              >
-                {item.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      <ComingSoonPopup label={comingSoon} isVisible={!!comingSoon} />
+      <ExpandableTabs
+        tabs={TABS}
+        selectedId={activeId}
+        onTabSelect={onSelect}
+      />
+      <ComingSoonPopup label={soon} isVisible={!!soon} />
     </View>
   );
 }
