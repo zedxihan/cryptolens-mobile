@@ -1,3 +1,5 @@
+import { Href } from 'expo-router';
+import type { LucideIcon } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, {
@@ -8,6 +10,23 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
+export type TabItem = {
+  type?: 'tab' | 'separator';
+  id: string;
+  title?: string;
+  icon?: LucideIcon;
+  route?: Href;
+};
+
+interface TabsProps {
+  tabs: TabItem[];
+  selectedId: string;
+  onTabSelect: (id: string) => void;
+  activeColor?: string;
+  activeBgColor?: string;
+  inactiveColor?: string;
+}
+
 const S = { dampingRatio: 1, duration: 400 };
 
 export const ExpandableTabs = ({
@@ -17,9 +36,9 @@ export const ExpandableTabs = ({
   activeColor = '#29d18b',
   activeBgColor = 'rgba(41, 209, 139, 0.15)',
   inactiveColor = '#71717a',
-}: any) => (
+}: TabsProps) => (
   <View className="border-border bg-surface/95 flex-row items-center gap-1.5 rounded-2xl border p-1 px-2 shadow-lg">
-    {tabs.map((t: any, i: number) =>
+    {tabs.map((t, i) =>
       t.type === 'separator' ? (
         <View key={i} className="bg-border mx-1 h-7 w-px" />
       ) : (
@@ -42,7 +61,7 @@ const TabButton = ({ t, sel, onSel, active, bg, inactive }: any) => {
   const p = useSharedValue(sel ? 1 : 0);
   useEffect(() => {
     p.value = withSpring(sel ? 1 : 0, S);
-  }, [sel]);
+  }, [sel, p]);
 
   const style = useAnimatedStyle(() => ({
     paddingHorizontal: interpolate(p.value, [0, 1], [12, 22]),
@@ -54,7 +73,7 @@ const TabButton = ({ t, sel, onSel, active, bg, inactive }: any) => {
     width: interpolate(p.value, [0, 1], [0, w]),
     opacity: p.value,
   }));
-  const Icon = t.icon;
+  const Icon = t.icon!;
 
   return (
     <Pressable onPress={onSel}>

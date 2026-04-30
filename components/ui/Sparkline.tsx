@@ -61,21 +61,19 @@ interface SparklineCellProps {
   className?: string;
 }
 
-export const SparklineCell = memo(
-  ({
-    data,
-    isPositive,
-    strokeWidth = 2,
-    className = '',
-  }: SparklineCellProps) => {
-    return (
-      <View className={`items-end justify-center ${className}`}>
-        <Sparkline
-          data={data}
-          isPositive={isPositive}
-          strokeWidth={strokeWidth}
-        />
-      </View>
-    );
-  },
-);
+export const SparklineCell = memo(function SparklineCell({
+  data,
+  isPositive,
+  strokeWidth = 2,
+  className = '',
+}: SparklineCellProps) {
+  return (
+    <View className={`items-end justify-center ${className}`}>
+      <Sparkline
+        data={data}
+        isPositive={isPositive}
+        strokeWidth={strokeWidth}
+      />
+    </View>
+  );
+});

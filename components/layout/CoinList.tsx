@@ -26,40 +26,38 @@ interface CoinListProps {
   initialSort?: Sort;
 }
 
-const SortBtn = memo(
-  ({
-    label,
-    field,
-    sort,
-    onSort,
-  }: {
-    label: string;
-    field: SortField;
-    sort: Sort;
-    onSort: (f: SortField) => void;
-  }) => {
-    const active = sort.field === field;
-    const Icon = !active
-      ? ChevronsUpDown
-      : sort.order === 'desc'
-        ? ChevronDown
-        : ChevronUp;
+const SortBtn = memo(function SortBtn({
+  label,
+  field,
+  sort,
+  onSort,
+}: {
+  label: string;
+  field: SortField;
+  sort: Sort;
+  onSort: (f: SortField) => void;
+}) {
+  const active = sort.field === field;
+  const Icon = !active
+    ? ChevronsUpDown
+    : sort.order === 'desc'
+      ? ChevronDown
+      : ChevronUp;
 
-    return (
-      <Pressable
-        onPress={() => onSort(field)}
-        className="flex-row items-center gap-1 py-2 active:opacity-70"
+  return (
+    <Pressable
+      onPress={() => onSort(field)}
+      className="flex-row items-center gap-1 py-2 active:opacity-70"
+    >
+      <Text
+        className={`font-pmedium text-xs ${active ? 'text-text' : 'text-muted'}`}
       >
-        <Text
-          className={`font-pmedium text-xs ${active ? 'text-text' : 'text-muted'}`}
-        >
-          {label}
-        </Text>
-        <Icon size={12} color={active ? '#D8F1E6' : '#86A79B'} />
-      </Pressable>
-    );
-  },
-);
+        {label}
+      </Text>
+      <Icon size={12} color={active ? '#D8F1E6' : '#86A79B'} />
+    </Pressable>
+  );
+});
 
 export function CoinList({
   coins = [],

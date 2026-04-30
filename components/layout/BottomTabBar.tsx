@@ -10,14 +10,14 @@ import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ComingSoonPopup from '../ui/ComingSoonPopup';
-import { ExpandableTabs } from '../ui/ExpandableTabs';
+import { ExpandableTabs, type TabItem } from '../ui/ExpandableTabs';
 
-const TABS: any[] = [
+const TABS: TabItem[] = [
   { id: 'index', icon: Home, title: 'Home', route: '/' },
   { id: 'markets', icon: TrendingUp, title: 'Markets', route: '/markets' },
   { id: 'charts', icon: BarChart2, title: 'Charts' },
   { id: 'calendar', icon: Calendar, title: 'Calendar' },
-  { type: 'separator' },
+  { type: 'separator', id: 'sep' },
   { id: 'portfolio', icon: PieChart, title: 'Portfolio' },
 ];
 
@@ -37,10 +37,15 @@ export default function BottomTabBar() {
   const onSelect = (id: string) => {
     const tab = TABS.find((t) => t.id === id);
     if (tab?.route) router.push(tab.route);
-    else setSoon(tab?.title);
+    else if (tab?.title) setSoon(tab.title);
   };
 
-  const activeId = TABS.find((t) => t.route === pathname)?.id || 'index';
+  const activeId =
+    TABS.find((t) => {
+      if (!t.route) return false;
+      const route = t.route as string;
+      return route === '/' ? pathname === '/' : pathname.startsWith(route);
+    })?.id || 'index';
 
   return (
     <View
