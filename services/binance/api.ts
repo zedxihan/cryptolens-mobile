@@ -73,7 +73,7 @@ export async function fetchMarketData(): Promise<BinanceTicker[]> {
 async function getList(
   filterFn: (t: BinanceTicker) => boolean,
   sortFn: (a: BinanceTicker, b: BinanceTicker) => number,
-  limit: number = 4,
+  limit: number = 25,
 ) {
   const filtered = (await fetchMarketData())
     .filter(filterFn)

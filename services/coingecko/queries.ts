@@ -6,7 +6,7 @@ export const useSearchCoinsQuery = (debouncedQuery: string) => {
     queryKey: ['search', debouncedQuery],
     queryFn: () => searchCoins(debouncedQuery),
     enabled: !!debouncedQuery,
-    gcTime: 120000,
+    gcTime: 1000 * 60 * 2,
     retry: 1,
   });
 };

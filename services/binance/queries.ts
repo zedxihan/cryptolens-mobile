@@ -18,6 +18,6 @@ export const useHomeCoinsQuery = () => {
       };
     },
     refetchInterval: 1000,
-    staleTime: 0,
+    gcTime: 1000 * 60 * 2,
   });
 };

@@ -42,14 +42,23 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {/* Others */}
         <View className="px-3">
           <GlobalMcapChart />
         </View>
 
         <View className="flex-col gap-3 px-3">
-          <KPIBox title="Trending" icon="🔥" coins={trending} />
-          <KPIBox title="Top Gainers" icon="🚀" coins={gainers} />
+          <KPIBox
+            title="Trending"
+            icon="🔥"
+            coins={trending}
+            href="/markets/trending"
+          />
+          <KPIBox
+            title="Top Gainers"
+            icon="🚀"
+            coins={gainers}
+            href="/markets/gainers"
+          />
         </View>
       </ScrollView>
     </View>
