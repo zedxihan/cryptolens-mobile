@@ -1,6 +1,7 @@
 import type { FormattedTicker } from '@/services/binance/types';
 import { formatPrice } from '@/utils/format';
 import { Image } from 'expo-image';
+import { Href, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { PriceChange } from '../ui/PriceChange';
 
@@ -8,10 +9,12 @@ interface KPIBoxProps {
   title: string;
   icon: string;
   coins?: FormattedTicker[];
+  href: Href;
 }
 
-export default function KPIBox({ title, icon, coins = [] }: KPIBoxProps) {
+export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
   const visibleCoins = coins.slice(0, 4);
+  const router = useRouter();
 
   return (
     <View className="border-border-2 bg-surface-2 rounded-xl border p-4">
@@ -19,7 +22,10 @@ export default function KPIBox({ title, icon, coins = [] }: KPIBoxProps) {
         <Text className="font-psemibold text-text text-lg">
           {icon} {title}
         </Text>
-        <Pressable disabled className="active:opacity-70 disabled:opacity-50">
+        <Pressable
+          onPress={() => router.push(href)}
+          className="active:opacity-70"
+        >
           <Text className="font-pmedium text-muted text-sm">View more →</Text>
         </Pressable>
       </View>
