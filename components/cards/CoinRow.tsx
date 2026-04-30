@@ -41,9 +41,10 @@ const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
             <BadgeCheck size={11} color="#86a79b" fill="#214428" />
           </View>
 
-          <Text className="text-muted font-pregular text-sm">
-            {formatCurrency(market_cap)} <Text className="text-muted-2">|</Text>{' '}
-            {formatCurrency(total_volume)}
+          <Text className="text-muted font-pmedium text-sm">
+            {market_cap
+              ? `${formatCurrency(market_cap)} | ${formatCurrency(total_volume)}`
+              : `bVol ${formatCurrency(total_volume)}`}
           </Text>
         </View>
       </View>

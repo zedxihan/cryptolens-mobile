@@ -5,6 +5,8 @@ import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react-native';
 import { memo, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
+type ListCoin = Omit<Coin, 'market_cap'> & { market_cap?: number | null };
+
 type SortField =
   | 'market_cap'
   | 'total_volume'
@@ -17,10 +19,11 @@ interface Sort {
 }
 
 interface CoinListProps {
-  coins?: Coin[];
+  coins?: ListCoin[];
   isFetching?: boolean;
   isError?: boolean;
-  onCoinPress?: (coin: Coin) => void;
+  onCoinPress?: (coin: ListCoin) => void;
+  initialSort?: Sort;
 }
 
 const SortBtn = memo(
@@ -63,11 +66,9 @@ export function CoinList({
   isFetching,
   isError,
   onCoinPress,
+  initialSort = { field: 'market_cap', order: 'desc' },
 }: CoinListProps) {
-  const [sort, setSort] = useState<Sort>({
-    field: 'market_cap',
-    order: 'desc',
-  });
+  const [sort, setSort] = useState<Sort>(initialSort);
 
   const sortedIndices = useMemo(
     () =>
