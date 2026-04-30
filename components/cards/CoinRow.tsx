@@ -48,7 +48,7 @@ const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
         </View>
       </View>
 
-      <View className="mr-1 items-end gap-0.5">
+      <View className="items-end gap-0.5">
         <Text className="text-text font-psemibold text-lg tracking-tight">
           {formatCurrency(current_price)}
         </Text>
