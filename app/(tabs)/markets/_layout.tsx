@@ -43,7 +43,7 @@ export default function MarketsTabLayout() {
       >
         <TopTabs.Screen name="index" options={{ title: 'Top 100' }} />
         <TopTabs.Screen name="trending" options={{ title: 'Trending' }} />
-        <TopTabs.Screen name="topGainers" options={{ title: 'Top Gainers' }} />
+        <TopTabs.Screen name="gainers" options={{ title: 'Top Gainers' }} />
       </TopTabs>
     </SafeAreaView>
   );

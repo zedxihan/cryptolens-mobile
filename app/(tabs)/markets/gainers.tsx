@@ -2,7 +2,7 @@ import { CoinList } from '@/components/layout/CoinList';
 import { useHomeCoinsQuery } from '@/services/binance/queries';
 import { View } from 'react-native';
 
-export default function TrendingScreen() {
+export default function GainersScreen() {
   const { data, isFetching, isError } = useHomeCoinsQuery();
   const coins = data?.gainers || [];
 
