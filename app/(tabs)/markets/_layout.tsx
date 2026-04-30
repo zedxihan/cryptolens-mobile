@@ -21,11 +21,11 @@ export default function MarketsTabLayout() {
           tabBarScrollEnabled: true,
           tabBarItemStyle: {
             width: 'auto',
-            paddingHorizontal: 8,
+            paddingHorizontal: 4,
             paddingTop: 0,
           },
           tabBarContentContainerStyle: {
-            paddingLeft: 4,
+            paddingLeft: 8,
           },
           tabBarActiveTintColor: '#ffffff',
           tabBarInactiveTintColor: '#5c6460',
@@ -36,13 +36,14 @@ export default function MarketsTabLayout() {
           tabBarLabelStyle: {
             fontFamily: 'Poppins_600SemiBold',
             textTransform: 'none',
-            fontSize: 18,
-            letterSpacing: 0.5,
+            fontSize: 16,
           },
           tabBarPressColor: 'transparent',
         }}
       >
         <TopTabs.Screen name="index" options={{ title: 'Top 100' }} />
+        <TopTabs.Screen name="trending" options={{ title: 'Trending' }} />
+        <TopTabs.Screen name="topGainers" options={{ title: 'Top Gainers' }} />
       </TopTabs>
     </SafeAreaView>
   );
