@@ -5,7 +5,7 @@ export const useMarketTableQuery = () => {
   return useQuery({
     queryKey: ['marketTable'],
     queryFn: getTop100Merged,
-    refetchInterval: 30000,
-    initialData: [],
+    refetchInterval: 1000,
+    gcTime: 1000 * 60 * 2,
   });
 };
