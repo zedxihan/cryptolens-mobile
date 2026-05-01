@@ -1,13 +1,6 @@
-import { Menu, Search, X } from 'lucide-react-native';
+import { Search, UserRoundPlus, X } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
-import {
-  Image,
-  Keyboard,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Image, Keyboard, Pressable, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import logo from '../../assets/logo.png';
 import MobileDrawer from './MobileDrawer';
@@ -15,64 +8,69 @@ import MobileDrawer from './MobileDrawer';
 export default function Topbar() {
   const insets = useSafeAreaInsets();
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
-
-  const searchInputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    if (isSearchOpen) {
-      setTimeout(() => searchInputRef.current?.focus(), 100);
-    } else {
-      Keyboard.dismiss();
-      setQuery('');
-    }
-  }, [isSearchOpen]);
+    const keyboardListener = Keyboard.addListener('keyboardDidHide', () =>
+      inputRef.current?.blur(),
+    );
+    return () => keyboardListener.remove();
+  }, []);
 
   return (
-    <View className="z-50 w-full px-3" style={{ paddingTop: insets.top + 10 }}>
-      <View className="border-border-2 bg-surface-2 flex-row items-center justify-between rounded-2xl border px-4 py-3 shadow-xs">
-        {isSearchOpen ? (
-          <View className="flex-1 flex-row items-center gap-2">
-            <Search size={20} color="#86a79b" />
-            <TextInput
-              ref={searchInputRef}
-              value={query}
-              onChangeText={setQuery}
-              placeholder="Search coins..."
-              placeholderTextColor="#86a79b"
-              className="font-pregular text-text h-full flex-1 p-0 text-sm"
-              returnKeyType="search"
-            />
-            <Pressable onPress={() => setIsSearchOpen(false)} className="p-1">
-              <X size={20} color="#86a79b" />
-            </Pressable>
-          </View>
-        ) : (
-          <>
-            <View className="flex-row items-center gap-2">
-              <Image
-                source={logo}
-                className="h-8 w-8"
-                alt="Logo"
-                resizeMode="contain"
-              />
-              <Text className="font-pbold text-text text-lg tracking-tight">
-                CryptoLens
-              </Text>
-            </View>
+    <View
+      className="absolute inset-x-0 top-0 z-50 px-4"
+      style={{ paddingTop: insets.top + 10 }}
+    >
+      <View className="flex-row items-center justify-between gap-4">
+        <Pressable
+          onPress={() => setIsMenuOpen(true)}
+          className="active:opacity-70"
+        >
+          <Image
+            source={logo}
+            className="size-10"
+            alt="Logo"
+            resizeMode="contain"
+          />
+        </Pressable>
 
-            <View className="flex-row items-center gap-3">
-              <Pressable onPress={() => setIsSearchOpen(true)}>
-                <Search size={20} color="#d8f1e7" />
-              </Pressable>
-              <Pressable onPress={() => setIsMenuOpen(true)}>
-                <Menu size={20} color="#d8f1e7" />
-              </Pressable>
-            </View>
-          </>
-        )}
+        <View className="flex-1 flex-row items-center gap-3 rounded-full bg-[#121212]/90 px-4 py-2.5">
+          <Search size={24} color="#f2f2f2" />
+          <TextInput
+            ref={inputRef}
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search any coin"
+            placeholderTextColor="#888888"
+            className="font-pmedium text-text flex-1 p-0 text-base"
+            returnKeyType="search"
+          />
+
+          {query.length > 0 && (
+            <Pressable
+              onPress={() => setQuery('')}
+              className="active:opacity-70"
+              hitSlop={10}
+            >
+              <X size={20} color="#f2f2f2" />
+            </Pressable>
+          )}
+        </View>
+
+        <Pressable
+          onPress={() => {}}
+          className="size-12 items-center justify-center rounded-full bg-[#121212]/90 active:opacity-80"
+        >
+          <UserRoundPlus
+            size={24}
+            color="#f2f2f2"
+            strokeWidth={2}
+            style={{ marginLeft: 2.5 }}
+          />
+        </Pressable>
       </View>
 
       <MobileDrawer
