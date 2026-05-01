@@ -17,8 +17,8 @@ export default function GlobalMcapChart() {
   ];
 
   return (
-    <View className="border-border-2 bg-surface-2 rounded-2xl border p-3.5">
-      <View className="mb-4 flex-col gap-4">
+    <View className="border-border-2 bg-surface-2 rounded-2xl border p-3">
+      <View className="mb-3 flex-col gap-3">
         <Text className="font-psemibold text-text text-lg">
           Global Crypto Market Cap
         </Text>

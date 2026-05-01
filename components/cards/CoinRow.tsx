@@ -24,7 +24,7 @@ const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
   return (
     <Pressable
       onPress={onPress}
-      className="active:bg-surface-2 flex-row items-center justify-between p-4"
+      className="active:bg-surface-2 flex-row items-center justify-between p-3"
     >
       <View className="flex-row items-center gap-3">
         <View className="w-6 items-center justify-center">

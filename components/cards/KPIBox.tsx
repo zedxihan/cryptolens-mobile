@@ -17,8 +17,8 @@ export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
   const router = useRouter();
 
   return (
-    <View className="border-border-2 bg-surface-2 rounded-xl border p-4">
-      <View className="mb-4 flex-row items-center justify-between">
+    <View className="border-border-2 bg-surface-2 rounded-xl border p-3">
+      <View className="mb-3 flex-row items-center justify-between">
         <Text className="font-psemibold text-text text-lg">
           {icon} {title}
         </Text>
@@ -30,7 +30,7 @@ export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
         </Pressable>
       </View>
 
-      <View className="flex-col gap-4">
+      <View className="flex-col gap-3">
         {visibleCoins.map(
           ({ id, image, name, current_price, price_change_percentage_24h }) => (
             <View key={id} className="flex-row items-center justify-between">
