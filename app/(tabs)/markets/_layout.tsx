@@ -1,14 +1,20 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { withLayoutContext } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TopTabs = withLayoutContext(createMaterialTopTabNavigator().Navigator);
 
 export default function MarketsTabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: '#060c0a' }}
-      edges={['top']}
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#060c0a',
+        paddingTop: insets.top + 70,
+      }}
     >
       <TopTabs
         screenOptions={{
@@ -45,6 +51,6 @@ export default function MarketsTabLayout() {
         <TopTabs.Screen name="trending" options={{ title: 'Trending' }} />
         <TopTabs.Screen name="gainers" options={{ title: 'Top Gainers' }} />
       </TopTabs>
-    </SafeAreaView>
+    </View>
   );
 }
