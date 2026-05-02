@@ -1,7 +1,7 @@
 import type { FormattedTicker } from '@/services/binance/types';
-import { Image } from '../ui/Image';
 import { Href, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
+import { Image } from '../ui/Image';
 import { LivePrice } from '../ui/LivePrice';
 
 interface KPIBoxProps {
@@ -29,7 +29,7 @@ export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
         </Pressable>
       </View>
 
-      <View className="flex-col gap-3">
+      <View className="flex-col gap-4">
         {visibleCoins.map(({ id, image, name, symbol, current_price }) => (
           <View key={id} className="flex-row items-center justify-between">
             <View className="flex-1 flex-row items-center gap-2 pr-2">
@@ -51,8 +51,7 @@ export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
               symbol={symbol}
               currentPrice={current_price}
               showChange
-              className="items-end"
-              priceClassName="text-base"
+              className="flex-row items-center gap-2"
             />
           </View>
         ))}

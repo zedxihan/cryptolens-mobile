@@ -16,8 +16,8 @@ export const LivePrice = memo(function LivePrice({
   symbol,
   currentPrice = 0,
   className = '',
-  priceClassName = '',
-  changeClassName = '',
+  priceClassName = 'font-pmedium text-base',
+  changeClassName = 'font-pmedium text-sm',
   showChange = false,
 }: LivePriceProps) {
   const liveData = useTickerPrice(symbol);
@@ -28,7 +28,7 @@ export const LivePrice = memo(function LivePrice({
   return (
     <View className={className}>
       <Text
-        className={`font-psemibold text-base tracking-tight text-white ${priceClassName}`}
+        className={`tracking-tight text-white ${priceClassName}`}
         numberOfLines={1}
         adjustsFontSizeToFit
       >
@@ -36,7 +36,7 @@ export const LivePrice = memo(function LivePrice({
       </Text>
       {showChange && (
         <Text
-          className={`font-pmedium text-sm ${change >= 0 ? 'text-price-green' : 'text-price-red'} ${changeClassName}`}
+          className={`${change >= 0 ? 'text-price-green' : 'text-price-red'} ${changeClassName}`}
           numberOfLines={1}
         >
           {formatPercentage(change)}

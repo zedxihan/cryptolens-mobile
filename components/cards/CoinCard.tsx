@@ -1,6 +1,6 @@
 import { FormattedTicker } from '@/services/binance/types';
-import { Image } from '../ui/Image';
 import { Text, View } from 'react-native';
+import { Image } from '../ui/Image';
 import { LivePrice } from '../ui/LivePrice';
 import { SparklineCell } from '../ui/Sparkline';
 
@@ -42,8 +42,8 @@ export default function CoinCard({ coin }: CoinCardProps) {
             currentPrice={current_price}
             showChange
             className="items-start"
-            priceClassName="text-base mt-0.5"
-            changeClassName="text-base ml-0.5"
+            priceClassName="font-pmedium text-base m-0.5"
+            changeClassName="font-pmedium text-base"
           />
         </View>
 
