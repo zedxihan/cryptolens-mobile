@@ -1,4 +1,4 @@
-import { formatCurrency, formatPrice } from '@/utils/format';
+import { formatCompact, formatPrice } from '@/utils/format';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import * as d3 from 'd3-shape';
 import { useId, useMemo, useRef, useState } from 'react';
@@ -29,11 +29,7 @@ export default function AreaChart({
 
   const isMcap = dataKey === 'market_cap' || dataKey === 'marketCap';
   const fmtV = (v: number) =>
-    !isFinite(v)
-      ? '$0'
-      : isMcap
-        ? formatCurrency(v, { compact: true })
-        : formatPrice(v);
+    !isFinite(v) ? '$0' : isMcap ? formatCompact(v) : formatPrice(v);
   const fmtD = (t: number) =>
     new Date(t).toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
 

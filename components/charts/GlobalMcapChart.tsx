@@ -1,5 +1,5 @@
 import { useDashboardQuery } from '@/services/coingecko/queries';
-import { formatCurrency } from '@/utils/format';
+import { formatCompact } from '@/utils/format';
 import React, { useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import AreaChart from '@/components/ui/AreaChart';
@@ -31,7 +31,7 @@ export default function GlobalMcapChart() {
                   {stat.label}
                 </Text>
                 <Text className="font-psemibold text-text mt-1 text-xl">
-                  {formatCurrency(stat.value)}
+                  {formatCompact(stat.value)}
                 </Text>
               </View>
             ))}
