@@ -16,7 +16,6 @@ configureReanimatedLogger({
 export default function TabLayout() {
   return (
     <View className="bg-bg flex-1">
-      <Topbar />
       <Tabs
         tabBar={() => <BottomTabBar />}
         screenOptions={{
@@ -27,6 +26,7 @@ export default function TabLayout() {
         <Tabs.Screen name="index" />
         <Tabs.Screen name="markets" />
       </Tabs>
+      <Topbar />
     </View>
   );
 }

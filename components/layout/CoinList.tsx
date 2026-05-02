@@ -4,6 +4,7 @@ import { FlashList } from '@shopify/flash-list';
 import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react-native';
 import { memo, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type ListCoin = Omit<Coin, 'market_cap'> & { market_cap?: number | null };
 
@@ -66,6 +67,7 @@ export function CoinList({
   onCoinPress,
   initialSort = { field: 'market_cap', order: 'desc' },
 }: CoinListProps) {
+  const insets = useSafeAreaInsets();
   const [sort, setSort] = useState<Sort>(initialSort);
 
   const sortedIndices = useMemo(
@@ -111,7 +113,7 @@ export function CoinList({
 
   return (
     <View className="bg-bg flex-1">
-      <View className="border-border-2 bg-bg z-10 flex-row justify-between border-b px-4 py-1">
+      <View className="border-border-2 bg-bg z-10 flex-row justify-between border-b px-3 py-1">
         <View className="flex-row items-center gap-2">
           {btn('Market cap', 'market_cap')}
           <Text className="text-muted-2 text-xs">|</Text>
@@ -128,7 +130,7 @@ export function CoinList({
       <FlashList
         data={sortedIndices}
         keyExtractor={(idx) => coins[idx].id}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
         renderItem={({ item: idx }) => (
           <CoinRow
             coin={coins[idx] as any}

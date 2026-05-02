@@ -4,9 +4,11 @@ import GlobalMcapChart from '@/components/charts/GlobalMcapChart';
 import { useHomeCoinsQuery } from '@/services/binance/queries';
 
 import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const { data, isLoading } = useHomeCoinsQuery();
+  const insets = useSafeAreaInsets();
 
   if (isLoading) {
     return (
@@ -22,7 +24,11 @@ export default function HomeScreen() {
     <View className="bg-surface flex-1">
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingBottom: 24, gap: 12, paddingTop: 12 }}
+        contentContainerStyle={{
+          paddingBottom: insets.bottom + 100,
+          gap: 12,
+          paddingTop: insets.top + 70,
+        }}
       >
         <View>
           <ScrollView

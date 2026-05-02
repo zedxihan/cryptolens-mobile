@@ -98,10 +98,10 @@ export default function MobileDrawer({
     <Modal
       isVisible={isVisible}
       onBackdropPress={onClose}
-      animationIn="slideInRight"
-      animationOut="slideOutRight"
+      animationIn="slideInLeft"
+      animationOut="slideOutLeft"
       backdropOpacity={0.6}
-      style={{ margin: 0, flexDirection: 'row', justifyContent: 'flex-end' }}
+      style={{ margin: 0, flexDirection: 'row', justifyContent: 'flex-start' }}
     >
       <View className="border-border-2 bg-surface h-full w-[65vw] border-l shadow-2xl">
         <View

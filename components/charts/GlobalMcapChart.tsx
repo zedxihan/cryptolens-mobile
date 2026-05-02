@@ -1,5 +1,5 @@
 import { useDashboardQuery } from '@/services/coingecko/queries';
-import { formatCurrency } from '@/utils/format';
+import { formatCompact } from '@/utils/format';
 import React, { useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import AreaChart from '@/components/ui/AreaChart';
@@ -17,8 +17,8 @@ export default function GlobalMcapChart() {
   ];
 
   return (
-    <View className="border-border-2 bg-surface-2 rounded-2xl border p-3.5">
-      <View className="mb-4 flex-col gap-4">
+    <View className="border-border-2 bg-surface-2 rounded-2xl border p-3">
+      <View className="mb-3 flex-col gap-3">
         <Text className="font-psemibold text-text text-lg">
           Global Crypto Market Cap
         </Text>
@@ -31,7 +31,7 @@ export default function GlobalMcapChart() {
                   {stat.label}
                 </Text>
                 <Text className="font-psemibold text-text mt-1 text-xl">
-                  {formatCurrency(stat.value)}
+                  {formatCompact(stat.value)}
                 </Text>
               </View>
             ))}
