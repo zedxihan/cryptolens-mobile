@@ -1,24 +1,40 @@
-export const formatCurrency = (
-  v: number | null | undefined,
-  { compact = true } = {},
-): string => {
-  if (v == null || !Number.isFinite(v)) return '—';
+const SCALES = [
+  { val: 1e12, suffix: 'T' },
+  { val: 1e9, suffix: 'B' },
+  { val: 1e6, suffix: 'M' },
+  { val: 1e3, suffix: 'K' },
+];
 
-  if (!compact) {
-    return `$${v.toLocaleString()}`;
-  }
+// price (0.00015467)
+export const formatPrice = (value: any): string => {
+  const num = +value;
+  if (isNaN(num)) return '$0.00';
 
-  if (v >= 1e12) return `$${(v / 1e12).toFixed(2)}T`;
-  if (v >= 1e9) return `$${(v / 1e9).toFixed(2)}B`;
-  if (v >= 1e6) return `$${(v / 1e6).toFixed(2)}M`;
+  const abs = Math.abs(num);
+  const decimals = abs < 0.1 ? 5 : abs < 1 ? 4 : 2;
+  const formatted = abs.toFixed(decimals).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
-  return `$${v.toLocaleString()}`;
+  return (num < 0 ? '-$' : '$') + formatted;
 };
 
-export const formatPrice = (v: number | null | undefined): string => {
-  if (v == null || !Number.isFinite(v)) return '$0';
+// compact (1.2B)
+export const formatCompact = (value: any): string => {
+  const num = +value;
+  if (isNaN(num)) return '—';
 
-  if (v >= 1) return `$${v.toFixed(2)}`;
-  if (v >= 0.1) return `$${v.toFixed(4)}`;
-  return `$${v.toFixed(5)}`;
+  const abs = Math.abs(num);
+  const scale = SCALES.find((s) => abs >= s.val);
+  if (!scale) return formatPrice(num);
+
+  const formatted = (abs / scale.val)
+    .toFixed(2)
+    .replace(/\d(?=(\d{3})+$)/g, '$&,');
+  return (num < 0 ? '-$' : '$') + formatted + scale.suffix;
+};
+
+// percentage (2.45%)
+export const formatPercentage = (value: any): string => {
+  const num = +value;
+  if (isNaN(num)) return '0.00%';
+  return (num >= 0 ? '+' : '') + num.toFixed(2) + '%';
 };
