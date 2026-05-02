@@ -1,9 +1,9 @@
 import { FormattedTicker } from '@/services/binance/types';
-import { formatCurrency } from '@/utils/format';
+import { formatCompact } from '@/utils/format';
 import { BadgeCheck } from 'lucide-react-native';
 import { memo } from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
-import { PriceChange } from '../ui/PriceChange';
+import { LivePrice } from '../ui/LivePrice';
 
 interface CoinRowProps {
   coin: FormattedTicker;
@@ -12,14 +12,7 @@ interface CoinRowProps {
 }
 
 const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
-  const {
-    image,
-    symbol,
-    market_cap,
-    total_volume,
-    current_price,
-    price_change_percentage_24h,
-  } = coin;
+  const { image, symbol, market_cap, total_volume, current_price } = coin;
 
   return (
     <Pressable
@@ -43,18 +36,18 @@ const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
 
           <Text className="text-muted font-pmedium text-sm">
             {market_cap
-              ? `${formatCurrency(market_cap)} | ${formatCurrency(total_volume)}`
-              : `bVol ${formatCurrency(total_volume)}`}
+              ? `${formatCompact(market_cap)} | ${formatCompact(total_volume)}`
+              : `bVol ${formatCompact(total_volume)}`}
           </Text>
         </View>
       </View>
 
-      <View className="items-end gap-0.5">
-        <Text className="text-text font-psemibold text-lg tracking-tight">
-          {formatCurrency(current_price)}
-        </Text>
-        <PriceChange value={price_change_percentage_24h} className="text-sm" />
-      </View>
+      <LivePrice
+        symbol={symbol}
+        currentPrice={current_price}
+        showChange
+        className="items-end"
+      />
     </Pressable>
   );
 };
@@ -62,9 +55,7 @@ const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
 export const CoinRow = memo(CoinRowComponent, (prev, next) => {
   return (
     prev.rank === next.rank &&
-    prev.coin.current_price === next.coin.current_price &&
-    prev.coin.total_volume === next.coin.total_volume &&
-    prev.coin.price_change_percentage_24h ===
-      next.coin.price_change_percentage_24h
+    prev.coin.id === next.coin.id &&
+    prev.coin.total_volume === next.coin.total_volume
   );
 });
