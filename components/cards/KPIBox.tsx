@@ -1,5 +1,5 @@
 import type { FormattedTicker } from '@/services/binance/types';
-import { Image } from 'expo-image';
+import { Image } from '../ui/Image';
 import { Href, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { LivePrice } from '../ui/LivePrice';
@@ -40,7 +40,7 @@ export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
                 transition={200}
               />
               <Text
-                className="text-md font-pmedium text-text"
+                className="font-pmedium text-text text-base"
                 numberOfLines={1}
               >
                 {name}
@@ -52,7 +52,7 @@ export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
               currentPrice={current_price}
               showChange
               className="items-end"
-              priceClassName="text-md"
+              priceClassName="text-base"
             />
           </View>
         ))}

@@ -1,8 +1,9 @@
 import { FormattedTicker } from '@/services/binance/types';
 import { formatCompact } from '@/utils/format';
+import { Image } from '../ui/Image';
 import { BadgeCheck } from 'lucide-react-native';
 import { memo } from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { LivePrice } from '../ui/LivePrice';
 
 interface CoinRowProps {
