@@ -1,6 +1,4 @@
-import type { BinanceTicker } from './types';
-
-export const liveMarketCache = new Map<string, BinanceTicker>();
+import { priceActions } from '@/store/usePriceStore';
 
 let ws: WebSocket | null = null;
 let heartbeatTimer: ReturnType<typeof setTimeout> | null = null;
@@ -29,29 +27,23 @@ export function connectWs() {
 
   ws.onmessage = ({ data }) => {
     resetHeartbeat();
-
     try {
       const ticks = JSON.parse(data);
       if (!Array.isArray(ticks)) return;
 
-      for (const { s, c, q, o } of ticks) {
+      for (const { s, c, o } of ticks) {
         if (!s.endsWith('USDT')) continue;
 
-        const currentPrice = +c,
-          openPrice = +o,
-          volume = +q;
-        const cached = liveMarketCache.get(s);
-        const ticker = cached ?? ({ id: s, symbol: s } as BinanceTicker);
-
-        ticker.current_price = currentPrice;
-        ticker.total_volume = volume;
-        ticker.price_change_percentage_24h = openPrice
+        const currentPrice = +c;
+        const openPrice = +o;
+        const priceChange = openPrice
           ? ((currentPrice - openPrice) / openPrice) * 100
           : 0;
 
-        if (!cached) liveMarketCache.set(s, ticker);
+        // push to store
+        priceActions.setLivePrice(s, currentPrice, priceChange);
       }
-    } catch {} // ignore
+    } catch {}
   };
 
   ws.onclose = () => {

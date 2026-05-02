@@ -1,7 +1,7 @@
 import { getCoinIcon } from '../coingecko/api';
 import { fetchGet } from '../core/client';
 import type { BinanceTicker, FormattedTicker, RawBinanceTicker } from './types';
-import { connectWs, isWsConnected, liveMarketCache } from './ws';
+import { connectWs, isWsConnected } from './ws';
 
 const STABLECOINS = new Set([
   'USDC',
@@ -32,41 +32,33 @@ export async function formatTicker(t: BinanceTicker): Promise<FormattedTicker> {
   };
 }
 
-// core fetch & cache
-let initialFetch: Promise<BinanceTicker[]> | null = null;
+// core fetch
+let cachedData: BinanceTicker[] | null = null;
+let lastFetch = 0;
 
 export async function fetchMarketData(): Promise<BinanceTicker[]> {
   if (!isWsConnected()) connectWs();
 
-  if (liveMarketCache.size > 50) return Array.from(liveMarketCache.values());
+  const now = Date.now();
+  if (cachedData && now - lastFetch < 60000) return cachedData;
 
-  if (!initialFetch) {
-    initialFetch = (async () => {
-      try {
-        const data = await fetchGet<RawBinanceTicker[]>('binance/ticker/24hr');
-        if (!Array.isArray(data)) return Array.from(liveMarketCache.values());
+  try {
+    const data = await fetchGet<RawBinanceTicker[]>('binance/ticker/24hr');
+    if (!Array.isArray(data)) return cachedData || [];
 
-        // prettier-ignore
-        for (const { symbol, lastPrice, quoteVolume, priceChangePercent } of data) {
-          if (!liveMarketCache.has(symbol)) continue;
-
-          liveMarketCache.set(symbol, {
-            id: symbol,
-            symbol,
-            current_price: +lastPrice,
-            total_volume: +quoteVolume,
-            price_change_percentage_24h: +priceChangePercent,
-          });
-        }
-      } catch (err) {
-        console.error('Binance REST sync failed:', err);
-      } finally {
-        initialFetch = null;
-      }
-      return Array.from(liveMarketCache.values());
-    })();
+    cachedData = data.map((t) => ({
+      id: t.symbol,
+      symbol: t.symbol,
+      current_price: +t.lastPrice,
+      total_volume: +t.quoteVolume,
+      price_change_percentage_24h: +t.priceChangePercent,
+    }));
+    lastFetch = now;
+  } catch (err) {
+    console.error('Binance REST fetch failed:', err);
   }
-  return initialFetch;
+
+  return cachedData || [];
 }
 
 // generic list
