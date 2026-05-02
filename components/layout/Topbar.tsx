@@ -1,8 +1,10 @@
+import type { Coin } from '@/services/coingecko/types';
 import { Search, UserRoundPlus, X } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Image, Keyboard, Pressable, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import logo from '../../assets/logo.png';
+import SearchResults from '../ui/SearchResults';
 import MobileDrawer from './MobileDrawer';
 
 export default function Topbar() {
@@ -11,6 +13,12 @@ export default function Topbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inputRef = useRef<TextInput>(null);
+
+  const handleCoinPress = (coin: Coin) => {
+    inputRef.current?.blur();
+    Keyboard.dismiss();
+    // router.push(`/coin/${coin.id}`);
+  };
 
   useEffect(() => {
     const keyboardListener = Keyboard.addListener('keyboardDidHide', () =>
@@ -37,7 +45,7 @@ export default function Topbar() {
           />
         </Pressable>
 
-        <View className="flex-1 flex-row items-center gap-3 rounded-full bg-[#121212]/90 px-4 py-2.5">
+        <View className="bg-surface-2/90 flex-1 flex-row items-center gap-3 rounded-full px-4 py-2.5">
           <Search size={24} color="#f2f2f2" />
           <TextInput
             ref={inputRef}
@@ -62,7 +70,7 @@ export default function Topbar() {
 
         <Pressable
           onPress={() => {}}
-          className="size-12 items-center justify-center rounded-full bg-[#121212]/90 active:opacity-80"
+          className="bg-surface-2/90 size-12 items-center justify-center rounded-full active:opacity-80"
         >
           <UserRoundPlus
             size={24}
@@ -72,6 +80,21 @@ export default function Topbar() {
           />
         </Pressable>
       </View>
+
+      {query.length > 0 && (
+        <>
+          <Pressable
+            className="absolute -inset-x-20 -top-96 h-[200vh] bg-black/30"
+            onPress={() => {
+              setQuery('');
+              Keyboard.dismiss();
+            }}
+          />
+          <View className="mt-2">
+            <SearchResults query={query} onCoinPress={handleCoinPress} />
+          </View>
+        </>
+      )}
 
       <MobileDrawer
         isVisible={isMenuOpen}
