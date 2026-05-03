@@ -2,6 +2,9 @@
   "name": "cryptolens-mobile",
   "main": "expo-router/entry",
   "version": "0.1.0",
+  "workspaces": [
+    "worker"
+  ],
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
