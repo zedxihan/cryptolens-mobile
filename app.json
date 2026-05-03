@@ -2,7 +2,7 @@
   "expo": {
     "name": "CryptoLens",
     "slug": "cryptolens-mobile",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "cryptolens",
@@ -16,8 +16,9 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#060c0a"
       },
-      "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.cryptolensmobile"
+      "package": "com.anonymous.cryptolensmobile",
+      "versionCode": 1,
+      "predictiveBackGestureEnabled": false
     },
     "plugins": [
       "expo-router",
