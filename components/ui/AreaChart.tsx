@@ -160,7 +160,7 @@ export default function AreaChart({
           >
             <Text className="text-muted mb-1 text-xs">{fmtD(active.t)}</Text>
             <Text
-              className="text-[13px] font-semibold tabular-nums"
+              className="font-psemibold text-[13px] tabular-nums"
               style={{ color: accentColor }}
             >
               {isMcap ? 'Market Cap : ' : 'Price : '}

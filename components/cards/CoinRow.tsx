@@ -2,7 +2,8 @@ import { FormattedTicker } from '@/services/binance/types';
 import { formatCompact } from '@/utils/format';
 import { BadgeCheck } from 'lucide-react-native';
 import { memo } from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { Image } from '../ui/Image';
 import { LivePrice } from '../ui/LivePrice';
 
 interface CoinRowProps {
@@ -47,6 +48,7 @@ const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
         currentPrice={current_price}
         showChange
         className="items-end"
+        priceClassName="font-psemibold text-base"
       />
     </Pressable>
   );

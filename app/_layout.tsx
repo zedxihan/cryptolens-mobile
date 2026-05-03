@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { View } from 'react-native';
 import './globals.css';
 
 const queryClient = new QueryClient({
@@ -29,19 +30,23 @@ export default function RootLayout() {
     }
   }, [loaded, error]);
 
-  if (!loaded && !error) {
-    return null;
-  }
+  if (!loaded && !error) return null;
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack>
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            headerShown: false,
+      <View style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+        <View
+          pointerEvents="none"
+          className="bg-accent/3 absolute inset-0 z-999"
+          style={{
+            borderWidth: 1,
+            borderColor: 'rgba(0, 0, 0, 0.4)',
           }}
         />
-      </Stack>
+      </View>
     </QueryClientProvider>
   );
 }

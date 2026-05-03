@@ -1,9 +1,10 @@
 import type { Coin } from '@/services/coingecko/types';
 import { Search, UserRoundPlus, X } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
-import { Image, Keyboard, Pressable, TextInput, View } from 'react-native';
+import { Keyboard, Pressable, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/images/logo.svg';
+import { Image } from '../ui/Image';
 import SearchResults from '../ui/SearchResults';
 import MobileDrawer from './MobileDrawer';
 
@@ -39,9 +40,9 @@ export default function Topbar() {
         >
           <Image
             source={logo}
-            className="size-10"
+            className="size-12 rounded-full"
             alt="Logo"
-            resizeMode="contain"
+            contentFit="contain"
           />
         </Pressable>
 

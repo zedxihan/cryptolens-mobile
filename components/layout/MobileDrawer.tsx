@@ -65,7 +65,7 @@ const ActionButton = ({
   onClose,
 }: ActionButtonProps) => {
   const containerClasses = `group w-full flex-row items-center justify-start gap-3 rounded-xl border border-border-2 bg-surface-2 px-4 py-3 transition-all active:scale-95 ${className}`;
-  const textClasses = `font-pmedium text-md text-text transition-colors ${textClassName}`;
+  const textClasses = `font-pmedium text-base text-text transition-colors ${textClassName}`;
 
   return (
     <Pressable
