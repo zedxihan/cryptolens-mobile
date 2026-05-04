@@ -46,8 +46,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "b5e6be23-6c7e-4421-88a6-829bf27c7186"
+        "projectId": "8a785b78-ed20-4fea-9d2a-f17dc0e3770f"
       }
-    }
+    },
+    "owner": "cryptolens-org"
   }
 }

@@ -1,0 +1,15 @@
+changelog:
+  categories:
+    - title: 🚀 New Features
+      labels:
+        - feature
+        - enhancement
+    - title: 🛠️ Bug Fixes & Improvements
+      labels:
+        - bug
+        - fix
+    - title: 🧹 Chores & Documentation
+      labels:
+        - chore
+        - docs
+        - refactor
