@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "CryptoLens",
-    "slug": "cryptolens-mobile",
+    "slug": "cryptolens",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,14 +9,14 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.cryptolensmobile"
+      "bundleIdentifier": "com.zedxihan.cryptolens"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#060c0a"
       },
-      "package": "com.anonymous.cryptolensmobile",
+      "package": "com.zedxihan.cryptolens",
       "versionCode": 1,
       "predictiveBackGestureEnabled": false
     },
@@ -36,7 +36,8 @@
       ],
       "expo-font",
       "expo-image",
-      "expo-web-browser"
+      "expo-web-browser",
+      "./plugins/withSeparateBuilds"
     ],
     "experiments": {
       "typedRoutes": true,
