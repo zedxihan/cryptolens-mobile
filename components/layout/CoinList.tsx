@@ -55,7 +55,7 @@ const SortBtn = memo(function SortBtn({
       >
         {label}
       </Text>
-      <Icon size={12} color={active ? '#D8F1E6' : '#86A79B'} />
+      <Icon size={12} color={active ? '#d8f1e7' : '#86a79b'} />
     </Pressable>
   );
 });
@@ -94,7 +94,7 @@ export function CoinList({
   const renderEmptyState = () => {
     if (isFetching) {
       return (
-        <ActivityIndicator size="large" color="#29D18B" className="mt-20" />
+        <ActivityIndicator size="large" color="#29d18b" className="mt-20" />
       );
     }
     if (isError) {

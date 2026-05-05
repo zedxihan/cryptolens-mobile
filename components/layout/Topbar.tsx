@@ -47,13 +47,13 @@ export default function Topbar() {
         </Pressable>
 
         <View className="bg-surface-2/90 flex-1 flex-row items-center gap-3 rounded-full px-4 py-2.5">
-          <Search size={24} color="#f2f2f2" />
+          <Search size={24} color="#d8f1e7" />
           <TextInput
             ref={inputRef}
             value={query}
             onChangeText={setQuery}
             placeholder="Search any coin"
-            placeholderTextColor="#888888"
+            placeholderTextColor="#86a79b"
             className="font-pmedium text-text flex-1 p-0 text-base"
             returnKeyType="search"
           />
@@ -64,7 +64,7 @@ export default function Topbar() {
               className="active:opacity-70"
               hitSlop={10}
             >
-              <X size={20} color="#f2f2f2" />
+              <X size={20} color="#d8f1e7" />
             </Pressable>
           )}
         </View>
@@ -75,7 +75,7 @@ export default function Topbar() {
         >
           <UserRoundPlus
             size={24}
-            color="#f2f2f2"
+            color="#d8f1e7"
             strokeWidth={2}
             style={{ marginLeft: 2.5 }}
           />

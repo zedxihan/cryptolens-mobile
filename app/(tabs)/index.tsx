@@ -1,4 +1,5 @@
 import CoinCard from '@/components/cards/CoinCard';
+import FearGreedCard from '@/components/cards/FearGreedCard';
 import KPIBox from '@/components/cards/KPIBox';
 import GlobalMcapChart from '@/components/charts/GlobalMcapChart';
 import { useHomeCoinsQuery } from '@/services/binance/queries';
@@ -13,7 +14,7 @@ export default function HomeScreen() {
   if (isLoading) {
     return (
       <View className="bg-surface flex-1 items-center justify-center">
-        <ActivityIndicator size="large" color="#22c55e" />
+        <ActivityIndicator size="large" color="#29d18b" />
       </View>
     );
   }
@@ -65,6 +66,11 @@ export default function HomeScreen() {
             coins={gainers}
             href="/markets/gainers"
           />
+        </View>
+
+        <View className="flex-row gap-3 px-3">
+          <FearGreedCard />
+          <FearGreedCard />
         </View>
       </ScrollView>
     </View>
