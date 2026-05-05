@@ -33,8 +33,8 @@ export default function MarketsTabLayout() {
           tabBarContentContainerStyle: {
             paddingLeft: 8,
           },
-          tabBarActiveTintColor: '#ffffff',
-          tabBarInactiveTintColor: '#5c6460',
+          tabBarActiveTintColor: '#d8f1e7',
+          tabBarInactiveTintColor: '#5f7d73',
           tabBarIndicatorStyle: {
             height: 0,
             display: 'none',

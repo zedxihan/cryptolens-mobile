@@ -4,7 +4,7 @@ import { ActivityIndicator, Text, View } from 'react-native';
 import { clamp } from 'react-native-reanimated';
 import Svg, { Circle, G, Path } from 'react-native-svg';
 
-const GAUGE_COLORS = ['#B91C1C', '#EF4444', '#FACC15', '#4ADE80', '#16A34A'];
+const GAUGE_COLORS = ['#b91c1c', '#ef4444', '#facc15', '#4ade80', '#16a34a'];
 
 export default function FearGreedCard() {
   const { data, isLoading } = useFearGreedQuery();
@@ -86,4 +86,4 @@ export default function FearGreedCard() {
       </View>
     </View>
   );
-};
+}

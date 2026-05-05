@@ -42,7 +42,7 @@ export default function SearchResults({
         contentContainerStyle={{ padding: 8 }}
       >
         {isLoading ? (
-          <ActivityIndicator color="#29D18B" className="my-4" />
+          <ActivityIndicator color="#29d18b" className="my-4" />
         ) : !staticData?.length ? (
           <Text className="text-muted font-pmedium my-4 text-center text-sm">
             {`No coins found for "${query}"`}
