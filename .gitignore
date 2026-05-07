@@ -35,3 +35,7 @@ app-example
 
 /ios
 /android
+
+# Worker
+.wrangler/
+.dev.vars
