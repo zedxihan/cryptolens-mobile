@@ -1,4 +1,4 @@
-import { FormattedTicker } from '@/services/binance/types';
+import { FormattedTicker } from '@/services/types';
 import { formatCompact } from '@/utils/format';
 import { BadgeCheck } from 'lucide-react-native';
 import { memo } from 'react';

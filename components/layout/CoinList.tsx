@@ -1,5 +1,5 @@
 import { CoinRow } from '@/components/cards/CoinRow';
-import type { Coin } from '@/services/coingecko/types';
+import type { Coin } from '@/services/types';
 import { FlashList } from '@shopify/flash-list';
 import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react-native';
 import { memo, useMemo, useState } from 'react';

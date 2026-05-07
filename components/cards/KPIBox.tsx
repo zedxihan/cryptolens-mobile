@@ -1,4 +1,4 @@
-import type { FormattedTicker } from '@/services/binance/types';
+import type { FormattedTicker } from '@/services/types';
 import { Href, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { Image } from '../ui/Image';

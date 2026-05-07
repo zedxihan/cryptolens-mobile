@@ -1,5 +1,5 @@
-import { useSearchCoinsQuery } from '@/services/coingecko/queries';
-import type { Coin } from '@/services/coingecko/types';
+import { useSearchCoinsQuery } from '@/services/queries';
+import type { Coin } from '@/services/types';
 import { Image } from './Image';
 import { memo, useEffect, useState } from 'react';
 import {

@@ -1,4 +1,4 @@
-import type { Coin } from '@/services/coingecko/types';
+import type { Coin } from '@/services/types';
 import { Search, UserRoundPlus, X } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Keyboard, Pressable, TextInput, View } from 'react-native';
