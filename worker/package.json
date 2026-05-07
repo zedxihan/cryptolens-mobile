@@ -5,6 +5,9 @@
   "module": "worker.ts",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250224.0",
-    "wrangler": "^3.109.2"
+    "wrangler": "4"
+  },
+  "dependencies": {
+    "hono": "^4.12.17"
   }
 }
