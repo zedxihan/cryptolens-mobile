@@ -2,6 +2,7 @@ export interface Env {
   CG_KEY?: string;
   CMC_KEY?: string;
   APP_SECRET?: string;
+  VERSION?: string;
 }
 
 export interface RouteConfig {

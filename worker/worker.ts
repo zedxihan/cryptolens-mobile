@@ -64,7 +64,11 @@ Object.keys(ROUTES).forEach((routePath) => {
 
 app.notFound((c) => {
   return c.json(
-    { message: 'CryptoLens Hono API', routes: Object.keys(ROUTES) },
+    { 
+      message: 'CryptoLens Hono API', 
+      version: c.env.VERSION,
+      routes: Object.keys(ROUTES) 
+    },
     404,
   );
 });
