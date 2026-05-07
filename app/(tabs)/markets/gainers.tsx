@@ -1,5 +1,5 @@
 import { CoinList } from '@/components/layout/CoinList';
-import { useHomeCoinsQuery } from '@/services/binance/queries';
+import { useHomeCoinsQuery } from '@/services/queries';
 import { View } from 'react-native';
 
 export default function GainersScreen() {

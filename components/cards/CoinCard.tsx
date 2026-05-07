@@ -1,4 +1,4 @@
-import { FormattedTicker } from '@/services/binance/types';
+import { FormattedTicker } from '@/services/types';
 import { Text, View } from 'react-native';
 import { Image } from '../ui/Image';
 import { LivePrice } from '../ui/LivePrice';

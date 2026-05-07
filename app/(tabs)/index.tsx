@@ -2,7 +2,7 @@ import CoinCard from '@/components/cards/CoinCard';
 import FearGreedCard from '@/components/cards/FearGreedCard';
 import KPIBox from '@/components/cards/KPIBox';
 import GlobalMcapChart from '@/components/charts/GlobalMcapChart';
-import { useHomeCoinsQuery } from '@/services/binance/queries';
+import { useHomeCoinsQuery } from '@/services/queries';
 
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

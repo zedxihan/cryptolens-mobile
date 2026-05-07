@@ -1,4 +1,4 @@
-import { useDashboardQuery } from '@/services/coingecko/queries';
+import { useDashboardQuery } from '@/services/queries';
 import { formatCompact } from '@/utils/format';
 import React, { useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';

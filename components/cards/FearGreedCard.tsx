@@ -1,4 +1,4 @@
-import { useFearGreedQuery } from '@/services/cmc/queries';
+import { useFearGreedQuery } from '@/services/queries';
 import { ChevronRight } from 'lucide-react-native';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { clamp } from 'react-native-reanimated';
