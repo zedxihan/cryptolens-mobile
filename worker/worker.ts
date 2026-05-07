@@ -1,15 +1,15 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
-interface Env {
-  CG_KEY?: string;
-  CMC_KEY?: string;
-  APP_SECRET?: string;
-}
+import binanceApp from './api/binance';
+import coingeckoApp from './api/coingecko';
+import marketApp from './api/market';
+
+import { Env, requestUpstream, ROUTES } from './fetch';
 
 const app = new Hono<{ Bindings: Env }>();
 
-// basic CORS(web)
+// basic CORS(web) & security
 app.use(
   '*',
   cors({
@@ -20,7 +20,6 @@ app.use(
   }),
 );
 
-// security middleware
 app.use('*', async (c, next) => {
   if (!c.env.APP_SECRET) return next();
 
@@ -31,55 +30,35 @@ app.use('*', async (c, next) => {
   await next();
 });
 
-// proxy
-interface RouteConfig {
-  base: string;
-  ttl: number;
-  keyHeader?: string;
-  envKey?: keyof Env;
-}
+// global error handler
+app.onError((err, c) => {
+  console.error(`[Worker Error]: ${err.message}`);
+  return c.json({ error: err.message || 'Upstream connection failed' }, 502);
+});
 
-const ROUTES: Record<string, RouteConfig> = {
-  '/coingecko': {
-    base: 'https://api.coingecko.com/api/v3',
-    ttl: 60,
-    keyHeader: 'x-cg-demo-api-key',
-    envKey: 'CG_KEY',
-  },
-  '/binance': { base: 'https://data-api.binance.vision/api/v3', ttl: 5 },
-  '/binancef': { base: 'https://fapi.binance.com', ttl: 5 },
-  '/cmc': {
-    base: 'https://pro-api.coinmarketcap.com',
-    ttl: 60,
-    keyHeader: 'X-CMC_PRO_API_KEY',
-    envKey: 'CMC_KEY',
-  },
-  '/avatars': { base: 'https://ui-avatars.com/api', ttl: 86400 },
-};
+// API routes
+app.route('/api/coingecko', coingeckoApp);
+app.route('/api/binance', binanceApp);
+app.route('/api/market', marketApp);
 
-Object.entries(ROUTES).forEach(([routePath, config]) => {
+// proxy routes
+Object.keys(ROUTES).forEach((routePath) => {
   app.get(`${routePath}/*`, async (c) => {
     const url = new URL(c.req.url);
-    const upstreamURL =
-      config.base + url.pathname.slice(routePath.length) + url.search;
-    const headers = new Headers({ 'User-Agent': 'CryptoLens Proxy' });
+    const pathAndSearch = url.pathname.slice(routePath.length) + url.search;
 
-    if (config.keyHeader && config.envKey && c.env[config.envKey]) {
-      headers.set(config.keyHeader, c.env[config.envKey] as string);
-    }
+    const upstream = await requestUpstream({
+      routeKey: routePath,
+      path: pathAndSearch,
+      env: c.env,
+    });
 
-    try {
-      const upstream = await fetch(upstreamURL, {
-        headers,
-        cf: { cacheEverything: true, cacheTtl: config.ttl },
-      } as any);
-
-      const response = new Response(upstream.body, upstream);
-      response.headers.set('Cache-Control', `public, s-maxage=${config.ttl}`);
-      return response;
-    } catch (err) {
-      return c.json({ error: 'Upstream connection failed' }, 502);
-    }
+    const response = new Response(upstream.body, upstream); // clone
+    response.headers.set(
+      'Cache-Control',
+      `public, s-maxage=${ROUTES[routePath].ttl}`,
+    );
+    return response;
   });
 });
 
