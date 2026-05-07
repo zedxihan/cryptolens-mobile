@@ -1,5 +1,5 @@
 import { CoinList } from '@/components/layout/CoinList';
-import { useMarketTableQuery } from '@/services/core/queries';
+import { useMarketTableQuery } from '@/services/queries';
 import { View } from 'react-native';
 
 export default function Top100Screen() {
