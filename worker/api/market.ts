@@ -39,7 +39,7 @@ app.get('/etf-flows', async (c) => {
   const data = await Promise.all(
     ETF_SYMBOLS.map(async (asset) => {
       const res = await fetch<SosoHistoryItem[]>(
-        `/etfs/summary-history?symbol=${asset}`,
+        `/etfs/summary-history?symbol=${asset}&country_code=US`,
       );
       const raw = Array.isArray(res) ? res : [];
 
