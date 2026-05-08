@@ -40,3 +40,12 @@ export interface FearGreedIndex {
   value: number;
   label: string;
 }
+
+export interface FormattedEtfFlow {
+  asset: string;
+  netFlow: number;
+  date: string | number;
+  history: { date: string | number; value: number }[];
+}
+
+
