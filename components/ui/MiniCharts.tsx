@@ -41,7 +41,7 @@ export const Sparkline = memo(function Sparkline({
     })
     .join(' ');
 
-  const color = isPositive ? '#29d18b' : '#f75555';
+  const color = isPositive ? '#00a83e' : '#ff3a33';
 
   return (
     <View style={[{ width, height }, style]}>
@@ -81,8 +81,8 @@ export const MiniBarChart = memo(function MiniBarChart({
   data,
   width = 56,
   height = 32,
-  positiveColor = '#29d18b',
-  negativeColor = '#f75555',
+  positiveColor = '#00a83e',
+  negativeColor = '#ff3a33',
   style,
 }: BarChartProps) {
   if (!data?.length) return null;
