@@ -1,9 +1,11 @@
+/// <reference types="@cloudflare/workers-types" />
 export interface Env {
   CG_KEY?: string;
   CMC_KEY?: string;
   SOSOVALUE_KEY?: string;
   APP_SECRET?: string;
   VERSION?: string;
+  ICONS: KVNamespace;
 }
 
 export interface RouteConfig {

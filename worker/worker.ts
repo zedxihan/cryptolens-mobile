@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { cache } from 'hono/cache';
 import { cors } from 'hono/cors';
 
 import binanceApp from './api/binance';
@@ -8,6 +9,14 @@ import marketApp from './api/market';
 import { Env, requestUpstream, ROUTES } from './fetch';
 
 const app = new Hono<{ Bindings: Env }>();
+
+app.get(
+  '*',
+  cache({
+    cacheName: 'cryptolens-api',
+    cacheControl: 'max-age=5',
+  }),
+);
 
 // basic CORS(web) & security
 app.use(
@@ -64,10 +73,10 @@ Object.keys(ROUTES).forEach((routePath) => {
 
 app.notFound((c) => {
   return c.json(
-    { 
-      message: 'CryptoLens Hono API', 
+    {
+      message: 'CryptoLens Hono API',
       version: c.env.VERSION,
-      routes: Object.keys(ROUTES) 
+      routes: Object.keys(ROUTES),
     },
     404,
   );
