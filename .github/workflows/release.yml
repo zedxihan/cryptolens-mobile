@@ -63,24 +63,24 @@ jobs:
           mkdir -p apks
           tar -xzf build-archive.tar.gz -C apks/
 
-          echo "📦 Extracted files:"
-          ls -la apks/
+          echo "📦 Full structure of extracted archive:"
+          ls -laR apks/
 
           echo "🔄 Renaming APKs..."
-          for apk in apks/*.apk; do
-            if [ -f "$apk" ]; then
-              original=$(basename "$apk")
-              # Clean name: remove common prefixes
-              base=$(echo "$original" | sed 's/^app-//; s/-release//; s/.apk$//')
-              new_name="cryptolens-${{ github.ref_name }}-${base}.apk"
-              
-              mv "$apk" "./$new_name"
-              echo "✅ Renamed: $original → $new_name"
-            fi
+
+          # Find all APKs recursively (they are inside outputs/apk/release/)
+          for apk in $(find apks -name "*.apk" -type f); do
+            original=$(basename "$apk")
+            # Clean the name: remove "app-" and "-release"
+            base=$(echo "$original" | sed 's/^app-//; s/-release//')
+            new_name="cryptolens-${{ github.ref_name }}-${base}"
+
+            mv "$apk" "./$new_name"
+            echo "✅ Renamed: $original → $new_name"
           done
 
-          echo "🎉 Final APKs:"
-          ls -la *.apk
+          echo "🎉 Final APKs ready for release:"
+          ls -la cryptolens-*.apk
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
