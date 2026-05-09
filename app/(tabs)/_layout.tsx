@@ -1,7 +1,7 @@
 import Topbar from '@/components/layout/Topbar';
 import { Tabs } from 'expo-router';
 import { View } from 'react-native';
-import BottomTabBar from '../../components/layout/BottomTabBar';
+import BottomTabBar from '@/components/layout/BottomTabBar';
 
 import {
   configureReanimatedLogger,
