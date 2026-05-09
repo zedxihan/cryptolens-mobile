@@ -1,6 +1,5 @@
 import { useSearchCoinsQuery } from '@/services/queries';
 import type { Coin } from '@/services/types';
-import { Image } from './Image';
 import { memo, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -9,6 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Image } from './Image';
 import { LivePrice } from './LivePrice';
 
 // Debounce hook
