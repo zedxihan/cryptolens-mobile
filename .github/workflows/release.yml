@@ -13,6 +13,10 @@ jobs:
     permissions:
       contents: write
 
+    # temp depriciation fix
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,22 +36,54 @@ jobs:
       - name: Install Dependencies
         run: bun install
 
-      - name: Build Android APKs
-        # Build and download (EAS)
-        run: eas build --platform android --profile preview --non-interactive --wait --output ./build-archive.tar.gz
+      - name: Build Android APKs (EAS Cloud)
+        id: eas_build
+        run: |
+          eas build --platform android \
+                    --profile preview \
+                    --non-interactive \
+                    --wait \
+                    --json > build-result.json
+
+          BUILD_URL=$(jq -r '.[0].artifacts.applicationArchiveUrl // .[0].artifacts.buildUrl' build-result.json)
+          echo "build_url=$BUILD_URL" >> $GITHUB_OUTPUT
+
+      - name: Download Build Artifact
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "${{ steps.eas_build.outputs.build_url }}" ]; then
+            echo "❌ Error: Build URL is empty"
+            exit 1
+          fi
+          curl -L -H "Authorization: Bearer $EXPO_TOKEN" -o build-archive.tar.gz "${{ steps.eas_build.outputs.build_url }}"
 
       - name: Extract and Rename APKs
         run: |
           mkdir -p apks
-          tar -xzf ./build-archive.tar.gz -C apks/
+          tar -xzf build-archive.tar.gz -C apks/
 
-          mv apks/*arm64-v8a*.apk ./cryptolens-${{ github.ref_name }}-arm64-v8a.apk
-          mv apks/*armeabi-v7a*.apk ./cryptolens-${{ github.ref_name }}-armeabi-v7a.apk
-          mv apks/*x86_64*.apk ./cryptolens-${{ github.ref_name }}-x86_64.apk
-          mv apks/*universal*.apk ./cryptolens-${{ github.ref_name }}-universal.apk || true
+          echo "📦 Extracted files:"
+          ls -la apks/
+
+          echo "🔄 Renaming APKs..."
+          for apk in apks/*.apk; do
+            if [ -f "$apk" ]; then
+              original=$(basename "$apk")
+              # Clean name: remove common prefixes
+              base=$(echo "$original" | sed 's/^app-//; s/-release//; s/.apk$//')
+              new_name="cryptolens-${{ github.ref_name }}-${base}.apk"
+              
+              mv "$apk" "./$new_name"
+              echo "✅ Renamed: $original → $new_name"
+            fi
+          done
+
+          echo "🎉 Final APKs:"
+          ls -la *.apk
 
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: ./*.apk
           generate_release_notes: true

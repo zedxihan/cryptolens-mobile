@@ -35,26 +35,45 @@
 
 Track live prices, discover trending coins, analyze market sentiment, and monitor global metrics — all in a fast, native mobile app.
 
-## Preview
+## Downloads
 
-**Live Web Version:** [https://cryptolens.link](https://cryptolens.link)
+<p align="center">
+
+  <a href="https://github.com/zedxihan/cryptolens/releases/latest">
+    <img src="https://img.shields.io/github/v/release/zedxihan/cryptolens?style=for-the-badge&logoColor=168b94&label=Stable&labelColor=00ffff&color=0d1117" alt="Latest Stable Release"/>
+  </a>
+  <a href="https://github.com/zedxihan/cryptolens/releases/">
+    <img src="https://img.shields.io/github/v/release/zedxihan/cryptolens?style=for-the-badge&include_prereleases&logoColor=087a87&label=Beta&labelColor=00ffff&color=0d1117" alt="Latest Pre-release"/>
+  </a>
+  <br/>
+   <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/zedxihan/cryptolens"><img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" width="160"/>
+   </a>
+
+</p>
+
+> [!NOTE]
+> Download, test, and share feedback or issues.
 
 ## Features
 
-- **Live Prices:** Real-time updates via Binance WebSockets.
-- **Market Insights:** Trending, Gainers, and Global metrics.
-- **Interactive Charts:** Sparklines and Global Market history.
-- **Top 100 Assets:** Fluid, sortable market tracking.
+- **Live Prices:** Real-time updates via Binance WebSockets with static fallbacks for 100% data availability.
+- **ETF Flow Tracking:** Real-time BTC/ETH net flow data from US markets.
+- **Market Sentiment:** Integrated Fear & Greed Index to gauge market psychology.
+- **Market Insights:** Trending, Gainers, and Global metrics at a glance.
+- **Interactive Charts:** Optimized sparklines and Global Market history.
+- **Top 100 Assets:** Fluid, sortable market tracking with deep linking.
 - **Native Performance:** 60fps UI with NativeWind v5 & FlashList.
+- **Serverless Backend:** High-performance Cloudflare Worker proxy for aggressive caching and optimized data delivery.
 
 ## Tech Stack
 
-- **React Native** (Expo 55)
+- **React Native** (Expo 51)
 - **TypeScript**
 - **NativeWind v5** (Tailwind CSS v4)
 - **Zustand** (Global state management)
-- **Bun** (Package manager)
-- Real-time data from **Binance (WebSockets + REST)** & **CoinGecko**
+- **TanStack Query** (Server state management)
+- **Cloudflare Workers** (Hono-based proxy backend)
+- Data from **Binance**, **CoinGecko**, **SosoValue**, and **CMC**
 
 ## Quick Start
 
@@ -75,17 +94,17 @@ Track live prices, discover trending coins, analyze market sentiment, and monito
 
 3. **Start the App**
    ```bash
-   npx expo start
+   bun expo start
    ```
 
 Scan the QR code with the **Expo Go** app on your iOS or Android device.
 
 ## 🗺 Roadmap
 
+- [x] **Global Search:** Full-text search for 10k+ assets with live price syncing.
+- [x] **Market Sentiment:** Fear & Greed Index integration.
 - [ ] **Coin Details:** Charts, history, and project info.
 - [ ] **Portfolio Tracker:** Securely monitor your holdings.
-- [ ] **Global Search:** Full-text search for 10k+ assets.
-- [ ] **Market Sentiment:** Fear & Greed Index integration.
 - [ ] **Price Alerts:** Instant custom push notifications.
 - [ ] **Crypto Calendar:** Track ICOs and major events.
 - [ ] **App Store Release:** Optimized iOS & Android builds.
