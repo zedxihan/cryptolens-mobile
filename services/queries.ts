@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   getDashboardData,
+  getEtfFlows,
   getFearGreedIndex,
   getPopularFour,
   getTop100Coins,
@@ -9,7 +10,7 @@ import {
   searchCoins,
 } from './api';
 
-// Home / Market Overview
+// Market Overview
 export const useHomeCoinsQuery = () => {
   return useQuery({
     queryKey: ['homeCoins'],
@@ -26,7 +27,7 @@ export const useHomeCoinsQuery = () => {
         popular: popular ?? [],
       };
     },
-    refetchInterval: 10000, // Reduced from 1s to 10s as per worker caching
+    refetchInterval: 10000,
     gcTime: 1000 * 60 * 2,
   });
 };
@@ -51,10 +52,10 @@ export const useSearchCoinsQuery = (debouncedQuery: string) => {
   });
 };
 
-// Dashboard / Stats
-export const useDashboardQuery = (timeframe: number | string = 30) => {
+// Global Market
+export const useGlobalMarketQuery = (timeframe: number | string = 30) => {
   return useQuery({
-    queryKey: ['dashboard', timeframe],
+    queryKey: ['globalMarket', timeframe],
     queryFn: () => getDashboardData(Number(timeframe)),
   });
 };
@@ -64,6 +65,15 @@ export const useFearGreedQuery = () => {
   return useQuery({
     queryKey: ['fearGreed'],
     queryFn: getFearGreedIndex,
-    staleTime: 300000,
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
+// ETFs
+export const useEtfFlowsQuery = () => {
+  return useQuery({
+    queryKey: ['etfFlows'],
+    queryFn: getEtfFlows,
+    staleTime: 1000 * 60 * 5,
   });
 };

@@ -9,8 +9,8 @@ import {
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import ComingSoonPopup from '../ui/ComingSoonPopup';
-import { ExpandableTabs, type TabItem } from '../ui/ExpandableTabs';
+import ComingSoonPopup from '@/components/ui/ComingSoonPopup';
+import { ExpandableTabs, type TabItem } from '@/components/ui/ExpandableTabs';
 
 const TABS: TabItem[] = [
   { id: 'index', icon: Home, title: 'Home', route: '/' },

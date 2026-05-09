@@ -4,6 +4,7 @@ import type {
   Coin,
   DashboardData,
   FearGreedIndex,
+  FormattedEtfFlow,
   FormattedTicker,
 } from './types';
 
@@ -36,4 +37,7 @@ export const getPopularFour = (): Promise<FormattedTicker[]> =>
 
 // Market
 export const getFearGreedIndex = (): Promise<FearGreedIndex | null> =>
-  fetchGet<FearGreedIndex>('api/market/cmc/fear-greed');
+  fetchGet<FearGreedIndex>('api/market/fear-greed');
+
+export const getEtfFlows = (): Promise<FormattedEtfFlow[]> =>
+  fetchGet<FormattedEtfFlow[]>('api/market/etf-flows');

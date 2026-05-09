@@ -51,7 +51,7 @@ const formatTicker = async (
 
 // Trending
 app.get('/trending', async (c) => {
-  const fetch = useBinance(c, 30);
+  const fetch = useBinance(c, 900); // 15min
   const raw = await fetch<RawTicker[]>('/ticker/24hr');
   if (!Array.isArray(raw)) return c.json([]);
 
@@ -66,7 +66,7 @@ app.get('/trending', async (c) => {
 
 // Top Gainers
 app.get('/gainers', async (c) => {
-  const fetch = useBinance(c, 30);
+  const fetch = useBinance(c, 900); // 15min
   const raw = await fetch<RawTicker[]>('/ticker/24hr');
   if (!Array.isArray(raw)) return c.json([]);
 
@@ -88,7 +88,7 @@ app.get('/gainers', async (c) => {
 const POPULAR = ['PAXGUSDT', 'BNBUSDT', 'AVAXUSDT', 'SUIUSDT'];
 
 app.get('/popular', async (c) => {
-  const fetch = useBinance(c, 300);
+  const fetch = useBinance(c, 21600); // 6hr
   const [raw, ...klines] = await Promise.all([
     fetch<RawTicker[]>('/ticker/24hr'),
     ...POPULAR.map((s) =>

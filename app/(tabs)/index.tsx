@@ -1,4 +1,5 @@
 import CoinCard from '@/components/cards/CoinCard';
+import EtfFlowCard from '@/components/cards/EtfFlowCard';
 import FearGreedCard from '@/components/cards/FearGreedCard';
 import KPIBox from '@/components/cards/KPIBox';
 import GlobalMcapChart from '@/components/charts/GlobalMcapChart';
@@ -70,7 +71,7 @@ export default function HomeScreen() {
 
         <View className="flex-row gap-3 px-3">
           <FearGreedCard />
-          <FearGreedCard />
+          <EtfFlowCard />
         </View>
       </ScrollView>
     </View>

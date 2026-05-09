@@ -1,8 +1,8 @@
 import { FormattedTicker } from '@/services/types';
 import { Text, View } from 'react-native';
-import { Image } from '../ui/Image';
-import { LivePrice } from '../ui/LivePrice';
-import { SparklineCell } from '../ui/Sparkline';
+import { Image } from '@/components/ui/Image';
+import { LivePrice } from '@/components/ui/LivePrice';
+import { SparklineCell } from '@/components/ui/MiniCharts';
 
 interface CoinCardProps {
   coin: FormattedTicker;

@@ -1,5 +1,7 @@
 import { Context, Hono } from 'hono';
 import { fetchUpstream, type Env } from '../fetch';
+import type { SosoHistoryItem } from '../types';
+import { resolveIcon } from './coingecko';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -13,14 +15,15 @@ const useStats = (
     fetchUpstream<T>({ routeKey, path, env: c.env, customTtl: ttl });
 };
 
-// CMC Routes
-app.get('/cmc/fear-greed', async (c) => {
-  const fetch = useStats(c, '/cmc', 3600);
-  const res = await fetch<{ data?: any }>('/v3/fear-and-greed/latest');
-  const data = res?.data;
+// cmc
+app.get('/fear-greed', async (c) => {
+  const fetch = useStats(c, '/cmc', 10800); // 3hr
+  const res = await fetch<{
+    data: { value: string | number; value_classification: string };
+  }>('/v3/fear-and-greed/latest');
 
-  if (!data) return c.json(null);
-  const index = Array.isArray(data) ? data[0] : data;
+  const index = res.data;
+  if (!index) return c.json(null);
 
   return c.json({
     value: Number(index.value),
@@ -28,6 +31,40 @@ app.get('/cmc/fear-greed', async (c) => {
   });
 });
 
-// others...
+// sosovalue
+const ETF_SYMBOLS = ['btc', 'eth'];
+
+app.get('/etf-flows', async (c) => {
+  const fetch = useStats(c, '/sosovalue', 21600); // 6hr
+
+  const data = await Promise.all(
+    ETF_SYMBOLS.map(async (asset) => {
+      const [res, image] = await Promise.all([
+        fetch<{ data: SosoHistoryItem[] }>(
+          `/etfs/summary-history?symbol=${asset}&country_code=US`,
+        ),
+        resolveIcon(c, asset),
+      ]);
+      const raw = res.data;
+
+      const history = raw.slice(0, 5).map((h) => ({
+        date: h.date ?? h.timestamp ?? '',
+        value: Number(h.total_net_inflow ?? 0),
+      }));
+
+      const latest = history[0] ?? { value: 0, date: '' };
+
+      return {
+        asset,
+        image,
+        netFlow: latest.value,
+        date: latest.date,
+        history,
+      };
+    }),
+  );
+
+  return c.json(data);
+});
 
 export default app;

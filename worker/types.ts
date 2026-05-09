@@ -61,3 +61,22 @@ export interface RawSimplePriceRes {
     usd_24h_change: number;
   };
 }
+
+// SosoValue ETF Types
+export interface SosoHistoryItem {
+  date?: string;
+  timestamp?: number;
+  total_net_inflow?: number;
+}
+
+export interface FormattedEtfFlow {
+  asset: string;
+  netFlow: number;
+  date: string | number;
+  history: { date: string | number; value: number }[];
+}
+
+export interface FearGreedIndex {
+  value: number;
+  label: string;
+}

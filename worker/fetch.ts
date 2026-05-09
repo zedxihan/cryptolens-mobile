@@ -1,8 +1,11 @@
+/// <reference types="@cloudflare/workers-types" />
 export interface Env {
   CG_KEY?: string;
   CMC_KEY?: string;
+  SOSOVALUE_KEY?: string;
   APP_SECRET?: string;
   VERSION?: string;
+  ICONS: KVNamespace;
 }
 
 export interface RouteConfig {
@@ -33,6 +36,12 @@ export const ROUTES: Record<string, RouteConfig> = {
     ttl: 60,
     keyHeader: 'X-CMC_PRO_API_KEY',
     envKey: 'CMC_KEY',
+  },
+  '/sosovalue': {
+    base: 'https://openapi.sosovalue.com/openapi/v1',
+    ttl: 60,
+    keyHeader: 'x-soso-api-key',
+    envKey: 'SOSOVALUE_KEY',
   },
   '/avatars': { base: 'https://ui-avatars.com/api', ttl: 86400 },
 };

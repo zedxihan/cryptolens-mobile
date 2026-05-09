@@ -1,6 +1,16 @@
 name = "cryptolens-proxy"
 main = "worker.ts"
-compatibility_date = "2026-05-07"
+compatibility_date = "2026-05-08"
 
 [vars]
-VERSION = "0.2.0"
+VERSION = "0.2.2"
+
+[[kv_namespaces]]
+binding = "ICONS"
+id = "8ebf3ca78d844427bfd6588463a97fb4"
+
+[observability]
+enabled = true
+
+[observability.logs]
+invocation_logs = true

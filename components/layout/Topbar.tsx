@@ -3,9 +3,9 @@ import { Search, UserRoundPlus, X } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Keyboard, Pressable, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import logo from '../../assets/images/logo.svg';
-import { Image } from '../ui/Image';
-import SearchResults from '../ui/SearchResults';
+import logo from '@/assets/images/logo.svg';
+import { Image } from '@/components/ui/Image';
+import SearchResults from '@/components/ui/SearchResults';
 import MobileDrawer from './MobileDrawer';
 
 export default function Topbar() {

@@ -1,8 +1,8 @@
 import type { FormattedTicker } from '@/services/types';
 import { Href, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { Image } from '../ui/Image';
-import { LivePrice } from '../ui/LivePrice';
+import { Image } from '@/components/ui/Image';
+import { LivePrice } from '@/components/ui/LivePrice';
 
 interface KPIBoxProps {
   title: string;
