@@ -39,7 +39,8 @@ export default function CoinCard({ coin }: CoinCardProps) {
 
           <LivePrice
             symbol={symbol}
-            currentPrice={current_price}
+            price={current_price}
+            change={price_change_percentage_24h}
             showChange
             className="items-start"
             priceClassName="font-pmedium text-base m-0.5"

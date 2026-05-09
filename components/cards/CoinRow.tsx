@@ -13,7 +13,14 @@ interface CoinRowProps {
 }
 
 const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
-  const { image, symbol, market_cap, total_volume, current_price } = coin;
+  const {
+    image,
+    symbol,
+    market_cap,
+    total_volume,
+    current_price,
+    price_change_percentage_24h,
+  } = coin;
 
   return (
     <Pressable
@@ -45,7 +52,8 @@ const CoinRowComponent = ({ coin, rank, onPress }: CoinRowProps) => {
 
       <LivePrice
         symbol={symbol}
-        currentPrice={current_price}
+        price={current_price}
+        change={price_change_percentage_24h}
         showChange
         className="items-end"
         priceClassName="font-psemibold text-base"

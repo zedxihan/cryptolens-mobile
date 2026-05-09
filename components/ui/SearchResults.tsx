@@ -68,7 +68,8 @@ const ResultItem = memo(function ResultItem({
   coin: Coin;
   onPress: () => void;
 }) {
-  const { symbol, name, image, current_price } = coin;
+  const { symbol, name, image, current_price, price_change_percentage_24h } =
+    coin;
   return (
     <Pressable
       onPress={onPress}
@@ -86,7 +87,8 @@ const ResultItem = memo(function ResultItem({
 
       <LivePrice
         symbol={symbol}
-        currentPrice={current_price}
+        price={current_price}
+        change={price_change_percentage_24h}
         showChange
         className="items-end"
       />

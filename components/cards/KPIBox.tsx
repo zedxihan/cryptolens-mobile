@@ -1,8 +1,8 @@
+import { Image } from '@/components/ui/Image';
+import { LivePrice } from '@/components/ui/LivePrice';
 import type { FormattedTicker } from '@/services/types';
 import { Href, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { Image } from '@/components/ui/Image';
-import { LivePrice } from '@/components/ui/LivePrice';
 
 interface KPIBoxProps {
   title: string;
@@ -30,31 +30,41 @@ export default function KPIBox({ title, icon, coins = [], href }: KPIBoxProps) {
       </View>
 
       <View className="flex-col gap-4">
-        {visibleCoins.map(({ id, image, name, symbol, current_price }) => (
-          <View key={id} className="flex-row items-center justify-between">
-            <View className="flex-1 flex-row items-center gap-2 pr-2">
-              <Image
-                source={{ uri: image }}
-                className="size-6 rounded-full"
-                contentFit="cover"
-                transition={200}
-              />
-              <Text
-                className="font-pmedium text-text text-base"
-                numberOfLines={1}
-              >
-                {name}
-              </Text>
-            </View>
+        {visibleCoins.map(
+          ({
+            id,
+            image,
+            name,
+            symbol,
+            current_price,
+            price_change_percentage_24h,
+          }) => (
+            <View key={id} className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-2 pr-2">
+                <Image
+                  source={{ uri: image }}
+                  className="size-6 rounded-full"
+                  contentFit="cover"
+                  transition={200}
+                />
+                <Text
+                  className="font-pmedium text-text text-base"
+                  numberOfLines={1}
+                >
+                  {name}
+                </Text>
+              </View>
 
-            <LivePrice
-              symbol={symbol}
-              currentPrice={current_price}
-              showChange
-              className="flex-row items-center gap-2"
-            />
-          </View>
-        ))}
+              <LivePrice
+                symbol={symbol}
+                price={current_price}
+                change={price_change_percentage_24h}
+                showChange
+                className="flex-row items-center gap-2"
+              />
+            </View>
+          ),
+        )}
       </View>
     </View>
   );

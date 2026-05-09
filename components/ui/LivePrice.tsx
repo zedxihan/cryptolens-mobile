@@ -5,7 +5,8 @@ import { Text, View } from 'react-native';
 
 interface LivePriceProps {
   symbol: string;
-  currentPrice?: number;
+  price?: number;
+  change?: number;
   className?: string; // Container className
   priceClassName?: string;
   changeClassName?: string;
@@ -14,7 +15,8 @@ interface LivePriceProps {
 
 export const LivePrice = memo(function LivePrice({
   symbol,
-  currentPrice = 0,
+  price: initialPrice = 0,
+  change: initialChange = 0,
   className = '',
   priceClassName = 'font-pmedium text-base',
   changeClassName = 'font-pmedium text-sm',
@@ -22,8 +24,8 @@ export const LivePrice = memo(function LivePrice({
 }: LivePriceProps) {
   const liveData = useTickerPrice(symbol);
 
-  const price = liveData?.price ?? currentPrice;
-  const change = liveData?.change ?? 0;
+  const currentPrice = liveData?.price ?? initialPrice;
+  const currentChange = liveData?.change ?? initialChange;
 
   return (
     <View className={className}>
@@ -32,14 +34,14 @@ export const LivePrice = memo(function LivePrice({
         numberOfLines={1}
         adjustsFontSizeToFit
       >
-        {formatPrice(price)}
+        {formatPrice(currentPrice)}
       </Text>
       {showChange && (
         <Text
-          className={`${change >= 0 ? 'text-price-green' : 'text-price-red'} ${changeClassName}`}
+          className={`${currentChange >= 0 ? 'text-price-green' : 'text-price-red'} ${changeClassName}`}
           numberOfLines={1}
         >
-          {formatPercentage(change)}
+          {formatPercentage(currentChange)}
         </Text>
       )}
     </View>
