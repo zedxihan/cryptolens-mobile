@@ -3,8 +3,8 @@ import { formatCompact } from '@/utils/format';
 import { BadgeCheck } from 'lucide-react-native';
 import { memo } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { Image } from '../ui/Image';
-import { LivePrice } from '../ui/LivePrice';
+import { Image } from '@/components/ui/Image';
+import { LivePrice } from '@/components/ui/LivePrice';
 
 interface CoinRowProps {
   coin: FormattedTicker;

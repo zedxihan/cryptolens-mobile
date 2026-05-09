@@ -1,4 +1,4 @@
-import { useDashboardQuery } from '@/services/queries';
+import { useGlobalMarketQuery } from '@/services/queries';
 import { formatCompact } from '@/utils/format';
 import React, { useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
@@ -6,7 +6,7 @@ import AreaChart from '@/components/ui/AreaChart';
 
 export default function GlobalMcapChart() {
   const [timeframe, setTimeframe] = useState<string>('30');
-  const { data, isLoading } = useDashboardQuery(timeframe);
+  const { data, isLoading } = useGlobalMarketQuery(timeframe);
 
   const stats = data?.global ?? null;
   const chartData = data?.chart ?? [];
