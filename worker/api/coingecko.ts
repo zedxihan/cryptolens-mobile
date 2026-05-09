@@ -24,7 +24,7 @@ const useCG = (c: Context<{ Bindings: Env }>, ttl: number) => {
 
 // Dashboard
 app.get('/dashboard', async (c) => {
-  const fetch = useCG(c, 1800);
+  const fetch = useCG(c, 10800); // 3hr
   const days = c.req.query('days') || '30';
 
   const [globalRes, btcChart] = await Promise.all([
@@ -69,7 +69,7 @@ app.get('/dashboard', async (c) => {
 
 // Get Top 100
 app.get('/top100', async (c) => {
-  const fetch = useCG(c, 300);
+  const fetch = useCG(c, 21600); // 6hr
   const tickers = await fetch<RawCoinRes[]>(
     '/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true',
   );
@@ -143,22 +143,27 @@ export const resolveIcon = async (
   c: Context<{ Bindings: Env }>,
   name: string,
 ) => {
-  const fetch = useCG(c, 86400);
-  const fallbackUrl = `${ROUTES['/avatars'].base}/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`;
-  try {
-    const res = await fetch<RawSearchRes>(
-      `/search?query=${encodeURIComponent(name)}`,
-    );
-    return res?.coins?.[0]?.large ?? fallbackUrl;
-  } catch {
-    return fallbackUrl;
-  }
-};
+  if (!name) return '';
 
-// Get Icons
-app.get('/icon', async (c) => {
-  const imageUrl = await resolveIcon(c, c.req.query('name') || '');
-  return c.redirect(imageUrl, 302);
-});
+  const key = name.trim().toLowerCase().replace(/\s+/g, '-');
+  const fallback = `${ROUTES['/avatars'].base}/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`;
+
+  const cached = await c.env.ICONS?.get(key).catch(() => null);
+  if (cached) return cached;
+
+  const fetch = useCG(c, 86400);
+  const url = await fetch<RawSearchRes>(
+    `/search?query=${encodeURIComponent(name)}`,
+  )
+    .then((res) => res?.coins?.[0]?.large ?? fallback)
+    .catch(() => fallback);
+
+  if (c.env.ICONS) {
+    c.executionCtx.waitUntil(
+      c.env.ICONS.put(key, url, { expirationTtl: 86400 * 30 }).catch(() => {}),
+    );
+  }
+  return url;
+};
 
 export default app;

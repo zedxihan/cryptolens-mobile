@@ -76,10 +76,7 @@ export interface FormattedEtfFlow {
   history: { date: string | number; value: number }[];
 }
 
-
 export interface FearGreedIndex {
   value: number;
   label: string;
 }
-
-
