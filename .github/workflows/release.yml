@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to fetch git history
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -63,15 +65,9 @@ jobs:
           mkdir -p apks
           tar -xzf build-archive.tar.gz -C apks/
 
-          echo "📦 Full structure of extracted archive:"
-          ls -laR apks/
-
           echo "🔄 Renaming APKs..."
-
-          # Find all APKs recursively (they are inside outputs/apk/release/)
           for apk in $(find apks -name "*.apk" -type f); do
             original=$(basename "$apk")
-            # Clean the name: remove "app-" and "-release"
             base=$(echo "$original" | sed 's/^app-//; s/-release//')
             new_name="cryptolens-${{ github.ref_name }}-${base}"
 
@@ -79,11 +75,83 @@ jobs:
             echo "✅ Renamed: $original → $new_name"
           done
 
-          echo "🎉 Final APKs ready for release:"
-          ls -la cryptolens-*.apk
+      - name: Generate Custom Changelog
+        id: generate-changelog
+        run: |
+          echo "Getting the previous tag..."
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            PREV_TAG=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          COMMITS=$(git log $PREV_TAG..HEAD --pretty=format:'%h %s' | tr '\n' '|')
+
+          FEATURES=""
+          BUG_FIXES=""
+          REFACTOR_STYLE=""
+          PERFORMANCE=""
+          CHORES=""
+          REPO_URL="https://github.com/${{ github.repository }}"
+
+          IFS='|' read -ra COMMIT_LIST <<< "$COMMITS"
+          for LINE in "${COMMIT_LIST[@]}"; do
+            HASH=$(echo "$LINE" | awk '{print $1}')
+            MESSAGE=$(echo "$LINE" | cut -d' ' -f2-)
+            LINK="[$HASH]($REPO_URL/commit/$HASH)"
+            FORMATTED_COMMIT="* $LINK: $MESSAGE"
+            
+            # 1. Features
+            if [[ $MESSAGE == feat* || $MESSAGE == feature* || $MESSAGE == enhancement* ]]; then
+              FEATURES+="$FORMATTED_COMMIT\n"
+              
+            # 2. Fixes & Improvements
+            elif [[ $MESSAGE == fix* || $MESSAGE == bug* || $MESSAGE == improvement* || $MESSAGE == patch* ]]; then
+              BUG_FIXES+="$FORMATTED_COMMIT\n"
+              
+            # 3. Refactors & Style
+            elif [[ $MESSAGE == refactor* || $MESSAGE == style* ]]; then
+              REFACTOR_STYLE+="$FORMATTED_COMMIT\n"
+              
+            # 4. Performance
+            elif [[ $MESSAGE == perf* ]]; then
+              PERFORMANCE+="$FORMATTED_COMMIT\n"
+              
+            # 5. Chores & Docs
+            elif [[ $MESSAGE == chore* || $MESSAGE == docs* || $MESSAGE == build* || $MESSAGE == ci* ]]; then
+              CHORES+="$FORMATTED_COMMIT\n"
+            fi
+          done
+
+          # Write all populated categories to the file
+          echo "" > CHANGELOG.md
+
+          if [ -n "$FEATURES" ]; then
+            echo "### 🎉 New Features" >> CHANGELOG.md
+            echo -e "$FEATURES" >> CHANGELOG.md
+          fi
+
+          if [ -n "$BUG_FIXES" ]; then
+            echo "### 🛠️ Bug Fixes & Improvements" >> CHANGELOG.md
+            echo -e "$BUG_FIXES" >> CHANGELOG.md
+          fi
+
+          if [ -n "$REFACTOR_STYLE" ]; then
+            echo "### 🎨 Refactors & Style Changes" >> CHANGELOG.md
+            echo -e "$REFACTOR_STYLE" >> CHANGELOG.md
+          fi
+
+          if [ -n "$PERFORMANCE" ]; then
+            echo "### 🚀 Performance Improvements" >> CHANGELOG.md
+            echo -e "$PERFORMANCE" >> CHANGELOG.md
+          fi
+
+          if [ -n "$CHORES" ]; then
+            echo "### 🧹 Chores & Documentation" >> CHANGELOG.md
+            echo -e "$CHORES" >> CHANGELOG.md
+          fi
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
         with:
           files: ./*.apk
-          generate_release_notes: true
+          body_path: CHANGELOG.md

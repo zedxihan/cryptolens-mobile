@@ -1,5 +1,5 @@
 <h1 align="center">CryptoLens</h1>
-<h3 align="center">A clean, modern, and distraction-free cryptocurrency monitoring dashboard — now on mobile</h3>
+<h3 align="center">A clean, modern, and distraction-free cryptocurrency monitoring dashboard </h3>
 
 <h1 align="center">
 <a href="https://github.com/zedxihan/cryptolens">
@@ -56,52 +56,63 @@ Track live prices, discover trending coins, analyze market sentiment, and monito
 
 ## Features
 
-- **Live Prices:** Real-time updates via Binance WebSockets with static fallbacks for 100% data availability.
-- **ETF Flow Tracking:** Real-time BTC/ETH net flow data from US markets.
+- **Live Prices:** Real-time updates via Binance WebSockets for hundreds of pairs.
+- **ETF Flow Tracking:** Historical and daily net flow data for BTC and ETH ETFs.
 - **Market Sentiment:** Integrated Fear & Greed Index to gauge market psychology.
 - **Market Insights:** Trending, Gainers, and Global metrics at a glance.
-- **Interactive Charts:** Optimized sparklines and Global Market history.
+- **Interactive Charts:** Optimized sparklines and Global Market history visualization.
 - **Top 100 Assets:** Fluid, sortable market tracking with deep linking.
-- **Native Performance:** 60fps UI with NativeWind v5 & FlashList.
-- **Serverless Backend:** High-performance Cloudflare Worker proxy for aggressive caching and optimized data delivery.
+- **Native Performance:** Optimized UI with NativeWind v5 and Shopify FlashList.
+- **Serverless Backend:** High-performance Cloudflare Worker proxy with KV caching.
 
 ## Tech Stack
 
-- **React Native** (Expo 51)
+- **React Native** (Expo 55)
 - **TypeScript**
 - **NativeWind v5** (Tailwind CSS v4)
 - **Zustand** (Global state management)
-- **TanStack Query** (Server state management)
-- **Cloudflare Workers** (Hono-based proxy backend)
+- **TanStack Query**
+- **Cloudflare Workers & KV** (Hono)
 - Data from **Binance**, **CoinGecko**, **SosoValue**, and **CMC**
 
 ## Quick Start
 
-1. **Clone & Install**
+### 1. Installation
 
-   ```bash
-   git clone https://github.com/zedxihan/cryptolens.git
-   cd cryptolens
-   bun install
-   ```
+```bash
+git clone https://github.com/zedxihan/cryptolens.git
+cd cryptolens && bun install
+```
 
-2. **Environment Setup** (Optional)
-   Create a `.env` file in the root if you need to point to a custom API proxy:
+### 2. Backend (Worker)
 
-   ```env
-   EXPO_PUBLIC_API_URL=https://your-api-proxy.com
-   ```
+Create `worker/.dev.vars` with your keys (`APP_SECRET`, `CG_KEY`, etc.).  
+_Note: Use **APP_SECRET** for the worker, not `EXPO_PUBLIC_APP_SECRET`._
 
-3. **Start the App**
-   ```bash
-   bun expo start
-   ```
+```bash
+cd worker && bunx wrangler dev --ip 0.0.0.0
+```
 
-Scan the QR code with the **Expo Go** app on your iOS or Android device.
+### 3. Frontend (App)
+
+Create a `.env` file in the root. If using a physical device, use your **local IP** for the API URL:
+
+```env
+EXPO_PUBLIC_API_URL=http://<YOUR_LOCAL_IP>:8787
+EXPO_PUBLIC_APP_SECRET=<YOUR_SECRET_KEY> #same APP_SECRET key
+```
+
+### 4. Run App
+
+```bash
+bun expo start
+```
+
+Scan the QR code with **Expo Go** to begin.
 
 ## 🗺 Roadmap
 
-- [x] **Global Search:** Full-text search for 10k+ assets with live price syncing.
+- [x] **Global Search:** Full-text search for thousands of assets with live price syncing.
 - [x] **Market Sentiment:** Fear & Greed Index integration.
 - [ ] **Coin Details:** Charts, history, and project info.
 - [ ] **Portfolio Tracker:** Securely monitor your holdings.
