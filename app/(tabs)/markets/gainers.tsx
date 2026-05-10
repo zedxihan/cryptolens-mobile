@@ -1,10 +1,10 @@
 import { CoinList } from '@/components/layout/CoinList';
-import { useHomeCoinsQuery } from '@/services/queries';
+import { useTopGainersQuery } from '@/services/queries';
 import { View } from 'react-native';
 
 export default function GainersScreen() {
-  const { data, isFetching, isError } = useHomeCoinsQuery();
-  const coins = data?.gainers || [];
+  const { data, isFetching, isError } = useTopGainersQuery();
+  const coins = data || [];
 
   return (
     <View className="bg-bg flex-1 px-1">

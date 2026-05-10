@@ -1,10 +1,10 @@
 import { CoinList } from '@/components/layout/CoinList';
-import { useHomeCoinsQuery } from '@/services/queries';
+import { useTrendingCoinsQuery } from '@/services/queries';
 import { View } from 'react-native';
 
 export default function TrendingScreen() {
-  const { data, isFetching, isError } = useHomeCoinsQuery();
-  const coins = data?.trending || [];
+  const { data, isFetching, isError } = useTrendingCoinsQuery();
+  const coins = data || [];
 
   return (
     <View className="bg-bg flex-1 px-1">
