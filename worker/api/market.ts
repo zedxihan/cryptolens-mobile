@@ -45,9 +45,8 @@ app.get('/etf-flows', async (c) => {
         ),
         resolveIcon(c, asset),
       ]);
-      const raw = res.data;
 
-      const history = raw.slice(0, 5).map((h) => ({
+      const history = res.data.slice(0, 5).map((h) => ({
         date: h.date ?? h.timestamp ?? '',
         value: Number(h.total_net_inflow ?? 0),
       }));

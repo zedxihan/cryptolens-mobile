@@ -51,36 +51,40 @@ const formatTicker = async (
 
 // Trending
 app.get('/trending', async (c) => {
+  const limit = Number(c.req.query('limit') || 25);
   const fetch = useBinance(c, 900); // 15min
   const raw = await fetch<RawTicker[]>('/ticker/24hr');
   if (!Array.isArray(raw)) return c.json([]);
 
-  const filtered = raw
-    .filter((t) => validPair(t.symbol))
-    .sort((a, b) => +b.quoteVolume - +a.quoteVolume)
-    .slice(0, 25);
-
-  const data = await Promise.all(filtered.map((t) => formatTicker(t, c)));
+  const data = await Promise.all(
+    raw
+      .filter((t) => validPair(t.symbol))
+      .sort((a, b) => +b.quoteVolume - +a.quoteVolume)
+      .slice(0, limit)
+      .map((t) => formatTicker(t, c)),
+  );
   return c.json(data);
 });
 
 // Top Gainers
 app.get('/gainers', async (c) => {
+  const limit = Number(c.req.query('limit') || 25);
   const fetch = useBinance(c, 900); // 15min
   const raw = await fetch<RawTicker[]>('/ticker/24hr');
   if (!Array.isArray(raw)) return c.json([]);
 
-  const filtered = raw
-    .filter(
-      (t) =>
-        validPair(t.symbol) &&
-        +t.quoteVolume > 1e6 &&
-        +t.priceChangePercent > 0,
-    )
-    .sort((a, b) => +b.priceChangePercent - +a.priceChangePercent)
-    .slice(0, 25);
-
-  const data = await Promise.all(filtered.map((t) => formatTicker(t, c)));
+  const data = await Promise.all(
+    raw
+      .filter(
+        (t) =>
+          validPair(t.symbol) &&
+          +t.quoteVolume > 1e6 &&
+          +t.priceChangePercent > 0,
+      )
+      .sort((a, b) => +b.priceChangePercent - +a.priceChangePercent)
+      .slice(0, limit)
+      .map((t) => formatTicker(t, c)),
+  );
   return c.json(data);
 });
 

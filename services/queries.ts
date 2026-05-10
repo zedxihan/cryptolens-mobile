@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getDashboardData,
   getEtfFlows,
@@ -10,70 +10,88 @@ import {
   searchCoins,
 } from './api';
 
+const MIN = 60000;
+
 // Market Overview
-export const useHomeCoinsQuery = () => {
-  return useQuery({
+export const useHomeCoinsQuery = () =>
+  useQuery({
     queryKey: ['homeCoins'],
     queryFn: async () => {
       const [trending, gainers, popular] = await Promise.all([
-        getTrendingCoins(),
-        getTopGainers(),
+        getTrendingCoins(4),
+        getTopGainers(4),
         getPopularFour(),
       ]);
-
-      return {
-        trending: trending ?? [],
-        gainers: gainers ?? [],
-        popular: popular ?? [],
-      };
+      return { trending, gainers, popular };
     },
-    refetchInterval: 10000,
-    gcTime: 1000 * 60 * 2,
+    gcTime: 5 * MIN,
+  });
+
+// Market
+export const useMarketTableQuery = () =>
+  useQuery({
+    queryKey: ['marketTable'],
+    queryFn: getTop100Coins,
+    staleTime: 10 * MIN,
+    gcTime: 15 * MIN,
+  });
+
+export const useTrendingCoinsQuery = () => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    queryKey: ['trendingCoins'],
+    queryFn: () => getTrendingCoins(),
+    staleTime: 5 * MIN,
+    gcTime: 10 * MIN,
+    placeholderData: () =>
+      queryClient.getQueryData<any>(['homeCoins'])?.trending,
   });
 };
 
-export const useMarketTableQuery = () => {
+export const useTopGainersQuery = () => {
+  const queryClient = useQueryClient();
   return useQuery({
-    queryKey: ['marketTable'],
-    queryFn: getTop100Coins,
-    refetchInterval: 30000,
-    gcTime: 1000 * 60 * 2,
+    queryKey: ['topGainers'],
+    queryFn: () => getTopGainers(),
+    staleTime: 5 * MIN,
+    gcTime: 10 * MIN,
+    placeholderData: () =>
+      queryClient.getQueryData<any>(['homeCoins'])?.gainers,
   });
 };
 
 // Search
-export const useSearchCoinsQuery = (debouncedQuery: string) => {
-  return useQuery({
+export const useSearchCoinsQuery = (debouncedQuery: string) =>
+  useQuery({
     queryKey: ['search', debouncedQuery],
     queryFn: () => searchCoins(debouncedQuery),
     enabled: !!debouncedQuery,
-    gcTime: 1000 * 60 * 2,
+    gcTime: 2 * MIN,
     retry: 1,
   });
-};
 
 // Global Market
-export const useGlobalMarketQuery = (timeframe: number | string = 30) => {
-  return useQuery({
+export const useGlobalMarketQuery = (timeframe: number | string = 30) =>
+  useQuery({
     queryKey: ['globalMarket', timeframe],
     queryFn: () => getDashboardData(Number(timeframe)),
+    gcTime: 5 * MIN,
   });
-};
 
 // Fear & Greed
-export const useFearGreedQuery = () => {
-  return useQuery({
+export const useFearGreedQuery = () =>
+  useQuery({
     queryKey: ['fearGreed'],
     queryFn: getFearGreedIndex,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 10 * MIN,
+    gcTime: 15 * MIN,
   });
-};
 
 // ETFs
-export const useEtfFlowsQuery = () => {
-  return useQuery({
+export const useEtfFlowsQuery = () =>
+  useQuery({
     queryKey: ['etfFlows'],
     queryFn: getEtfFlows,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 10 * MIN,
+    gcTime: 15 * MIN,
   });
-};
