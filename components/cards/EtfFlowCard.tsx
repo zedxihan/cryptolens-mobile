@@ -6,10 +6,8 @@ import { FormattedEtfFlow } from '@/services/types';
 import { formatCompact } from '@/utils/format';
 import { FlashList } from '@shopify/flash-list';
 import { ChevronRight } from 'lucide-react-native';
-import { memo, useCallback, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-
-const VIEWABILITY_CONFIG = { itemVisiblePercentThreshold: 50 };
 
 const EtfFlowSlide = memo(function EtfFlowSlide({
   item: { asset, image, date, netFlow, history },
@@ -25,7 +23,7 @@ const EtfFlowSlide = memo(function EtfFlowSlide({
   });
 
   return (
-    <View style={{ width }} className="justify-between px-1">
+    <View style={{ width }} className="justify-between">
       <View className="flex-row items-center gap-3">
         <Image
           source={{ uri: image }}
@@ -40,7 +38,7 @@ const EtfFlowSlide = memo(function EtfFlowSlide({
         />
       </View>
 
-      <View className="mt-5 flex-row items-end justify-between gap-4">
+      <View className="mt-4 flex-row items-end justify-between gap-4">
         <View className="flex-1">
           <Text className="font-pmedium text-muted text-xs leading-4">
             {dateStr}
@@ -61,19 +59,54 @@ const EtfFlowSlide = memo(function EtfFlowSlide({
   );
 });
 
+const PaginationDots = memo(
+  ({ total, active }: { total: number; active: number }) => (
+    <View className="mt-2 h-2 flex-row items-center justify-center gap-1.5">
+      {Array.from({ length: total }).map((_, i) => (
+        <View
+          key={i}
+          className={`h-1.5 rounded-full ${i === active ? 'bg-text w-3' : 'bg-muted-2 w-1.5'}`}
+        />
+      ))}
+    </View>
+  ),
+);
+
 export default function EtfFlowCard() {
   const { data, isLoading } = useEtfFlowsQuery();
   const [activeIndex, setActiveIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
 
-  const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
-    if (viewableItems[0]) setActiveIndex(viewableItems[0].index);
-  }, []);
+  const handleScroll = (e: any) => {
+    setActiveIndex((prev) => {
+      const next = Math.round(e.nativeEvent.contentOffset.x / cardWidth);
+      return next === prev ? prev : next;
+    });
+  };
+  // Time
+  const fetchedTime = useMemo(() => {
+    const timestamp = data?.[0]?.fetchedAt;
+    if (!timestamp) return null;
+
+    return new Date(timestamp).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      hour12: true,
+    });
+  }, [data]);
 
   return (
     <View className="border-border-2 bg-surface-2 flex-1 rounded-xl border p-3">
-      <View className="mb-2 flex-row items-center justify-between px-1">
-        <Text className="font-psemibold text-muted text-sm">ETF Net Flow</Text>
+      <View className="mb-2 flex-row items-center justify-between">
+        <View className="flex-row items-baseline gap-1.5">
+          <Text className="font-psemibold text-muted text-sm">
+            ETF Net Flow
+          </Text>
+          {fetchedTime && (
+            <Text className="font-pmedium text-muted-2 text-[10px]">
+              • {fetchedTime}
+            </Text>
+          )}
+        </View>
         <ChevronRight size={18} color="#5f7d73" />
       </View>
 
@@ -94,21 +127,14 @@ export default function EtfFlowCard() {
             renderItem={({ item }) => (
               <EtfFlowSlide item={item} width={cardWidth} />
             )}
-            onViewableItemsChanged={onViewableItemsChanged}
-            viewabilityConfig={VIEWABILITY_CONFIG}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
           />
         )}
       </View>
 
       {Array.isArray(data) && data.length > 1 && (
-        <View className="mt-2 h-2 flex-row items-center justify-center gap-1.5">
-          {data.map((_, i) => (
-            <View
-              key={i}
-              className={`h-1.5 rounded-full ${i === activeIndex ? 'bg-text w-3' : 'bg-muted-2 w-1.5'}`}
-            />
-          ))}
-        </View>
+        <PaginationDots total={data.length} active={activeIndex} />
       )}
     </View>
   );
