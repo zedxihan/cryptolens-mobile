@@ -48,9 +48,8 @@ const EtfFlowSlide = memo(function EtfFlowSlide({
             numberOfLines={1}
             adjustsFontSizeToFit
           >
-            {netFlow === 0
-              ? '$0.00'
-              : `${isPositive ? '+' : ''}${formatCompact(netFlow)}`}
+            {netFlow > 0 && '+'}
+            {formatCompact(netFlow)}
           </Text>
         </View>
         <MiniBarChart data={history} />
@@ -59,18 +58,24 @@ const EtfFlowSlide = memo(function EtfFlowSlide({
   );
 });
 
-const PaginationDots = memo(
-  ({ total, active }: { total: number; active: number }) => (
-    <View className="mt-2 h-2 flex-row items-center justify-center gap-1.5">
+const PaginationDots = memo(function PaginationDots({
+  total,
+  active,
+}: {
+  total: number;
+  active: number;
+}) {
+  return (
+    <View className="mt-2 flex-row items-center justify-center gap-1.5">
       {Array.from({ length: total }).map((_, i) => (
         <View
           key={i}
-          className={`h-1.5 rounded-full ${i === active ? 'bg-text w-3' : 'bg-muted-2 w-1.5'}`}
+          className={`h-1 rounded-full ${i === active ? 'bg-text w-2.5' : 'bg-muted-2 w-1'}`}
         />
       ))}
     </View>
-  ),
-);
+  );
+});
 
 export default function EtfFlowCard() {
   const { data, isLoading } = useEtfFlowsQuery();
@@ -78,11 +83,14 @@ export default function EtfFlowCard() {
   const [cardWidth, setCardWidth] = useState(0);
 
   const handleScroll = (e: any) => {
-    setActiveIndex((prev) => {
-      const next = Math.round(e.nativeEvent.contentOffset.x / cardWidth);
-      return next === prev ? prev : next;
-    });
+    const {
+      contentOffset: { x },
+      layoutMeasurement: { width },
+    } = e.nativeEvent;
+
+    if (width > 0) setActiveIndex(Math.round(x / width));
   };
+
   // Time
   const fetchedTime = useMemo(() => {
     const timestamp = data?.[0]?.fetchedAt;
