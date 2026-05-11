@@ -46,10 +46,13 @@ app.get('/etf-flows', async (c) => {
         resolveIcon(c, asset),
       ]);
 
-      const history = res.data.slice(0, 5).map((h) => ({
-        date: h.date ?? h.timestamp ?? '',
-        value: Number(h.total_net_inflow ?? 0),
-      }));
+      const history = res.data
+        .filter((h, i, self) => !i || h.date !== self[i - 1].date)
+        .slice(0, 5)
+        .map((h) => ({
+          date: h.date ?? h.timestamp ?? '',
+          value: Number(h.total_net_inflow ?? 0),
+        }));
 
       const latest = history[0] ?? { value: 0, date: '' };
 
@@ -58,6 +61,7 @@ app.get('/etf-flows', async (c) => {
         image,
         netFlow: latest.value,
         date: latest.date,
+        fetchedAt: new Date().toISOString(),
         history,
       };
     }),

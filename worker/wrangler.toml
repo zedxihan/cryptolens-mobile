@@ -3,7 +3,7 @@ main = "worker.ts"
 compatibility_date = "2026-05-08"
 
 [vars]
-VERSION = "0.2.2"
+VERSION = "0.2.3"
 
 [[kv_namespaces]]
 binding = "ICONS"
