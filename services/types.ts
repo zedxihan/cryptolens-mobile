@@ -46,5 +46,6 @@ export interface FormattedEtfFlow {
   image: string;
   netFlow: number;
   date: string | number;
+  fetchedAt: string;
   history: { date: string | number; value: number }[];
 }

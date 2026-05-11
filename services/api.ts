@@ -26,11 +26,15 @@ export const searchCoins = (query: string): Promise<Coin[]> => {
 };
 
 // Binance
-export const getTrendingCoins = (): Promise<FormattedTicker[]> =>
-  fetchGet<FormattedTicker[]>('api/binance/trending');
+export const getTrendingCoins = (limit?: number): Promise<FormattedTicker[]> =>
+  fetchGet<FormattedTicker[]>(
+    `api/binance/trending${limit ? `?limit=${limit}` : ''}`,
+  );
 
-export const getTopGainers = (): Promise<FormattedTicker[]> =>
-  fetchGet<FormattedTicker[]>('api/binance/gainers');
+export const getTopGainers = (limit?: number): Promise<FormattedTicker[]> =>
+  fetchGet<FormattedTicker[]>(
+    `api/binance/gainers${limit ? `?limit=${limit}` : ''}`,
+  );
 
 export const getPopularFour = (): Promise<FormattedTicker[]> =>
   fetchGet<FormattedTicker[]>('api/binance/popular');

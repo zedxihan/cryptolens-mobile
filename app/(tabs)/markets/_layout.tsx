@@ -18,6 +18,7 @@ export default function MarketsTabLayout() {
     >
       <TopTabs
         screenOptions={{
+          lazy: true,
           tabBarStyle: {
             backgroundColor: '#060c0a',
             elevation: 0,

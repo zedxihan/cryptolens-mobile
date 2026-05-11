@@ -79,20 +79,20 @@ interface BarChartProps extends ChartProps {
 
 export const MiniBarChart = memo(function MiniBarChart({
   data,
-  width = 56,
-  height = 32,
+  width = 48,
+  height = 36,
   positiveColor = '#00a83e',
   negativeColor = '#ff3a33',
   style,
 }: BarChartProps) {
   if (!data?.length) return null;
 
-  const values = getValues(data);
+  const values = getValues(data).reverse();
   const max = Math.max(...values.map(Math.abs), 1);
   const midPoint = height / 2;
 
   const barCount = values.length;
-  const barWidth = 5;
+  const barWidth = 7;
   const spacing = (width - barWidth) / (barCount - 1 || 1);
 
   return (
