@@ -1,4 +1,4 @@
-import { useFearGreedQuery } from '@/services/queries';
+import { useMarketIndicatorsQuery } from '@/services/queries';
 import { ChevronRight } from 'lucide-react-native';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { clamp } from 'react-native-reanimated';
@@ -7,10 +7,11 @@ import Svg, { Circle, G, Path } from 'react-native-svg';
 const GAUGE_COLORS = ['#b91c1c', '#ef4444', '#facc15', '#4ade80', '#16a34a'];
 
 export default function FearGreedCard() {
-  const { data, isLoading } = useFearGreedQuery();
+  const { data, isLoading } = useMarketIndicatorsQuery();
+  const fearGreed = data?.fearGreed;
 
-  const value = clamp(data?.value ?? 0, 0, 100);
-  const label = isLoading ? 'Loading...' : (data?.label ?? '_');
+  const value = clamp(fearGreed?.value ?? 0, 0, 100);
+  const label = isLoading ? 'Loading...' : (fearGreed?.label ?? '_');
 
   // SVG Geometry
   const strokeWidth = 4.5;
