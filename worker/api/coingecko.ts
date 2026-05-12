@@ -27,11 +27,13 @@ app.get('/dashboard', async (c) => {
   const fetch = useCG(c, 10800); // 3hr
   const days = c.req.query('days') || '30';
 
-  const [globalRes, btcChart] = await Promise.all([
+  const [globalRes, btcChart, btcImage, ethImage] = await Promise.all([
     fetch<RawGlobalRes>('/global'),
     fetch<RawChartRes>(
       `/coins/bitcoin/market_chart?vs_currency=usd&days=${days}`,
     ),
+    resolveIcon(c, 'btc'),
+    resolveIcon(c, 'eth'),
   ]);
 
   const global = globalRes?.data;
@@ -54,11 +56,18 @@ app.get('/dashboard', async (c) => {
       total_volume: global.total_volume.usd,
       mcap_change_percentage_24h: global.market_cap_change_percentage_24h_usd,
     },
-    dominance: {
-      btc_dom: btcDom,
-      eth_dom: ethDom,
-      others_dom: 100 - btcDom - ethDom,
-    },
+    dominance: [
+      {
+        symbol: 'BTC',
+        value: btcDom,
+        image: btcImage,
+      },
+      {
+        symbol: 'ETH',
+        value: ethDom,
+        image: ethImage,
+      },
+    ],
     chart: btcChart.market_caps.map(([time, btcMcap], i) => ({
       timestamp: time,
       market_cap: Math.round(btcMcap / domRatio),
