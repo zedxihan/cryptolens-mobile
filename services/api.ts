@@ -3,9 +3,9 @@ import { fetchGet } from './client';
 import type {
   Coin,
   DashboardData,
-  FearGreedIndex,
   FormattedEtfFlow,
   FormattedTicker,
+  MarketIndicators,
 } from './types';
 
 // Initialize WebSocket once
@@ -40,8 +40,8 @@ export const getPopularFour = (): Promise<FormattedTicker[]> =>
   fetchGet<FormattedTicker[]>('api/binance/popular');
 
 // Market
-export const getFearGreedIndex = (): Promise<FearGreedIndex | null> =>
-  fetchGet<FearGreedIndex>('api/market/fear-greed');
+export const getMarketIndicators = (): Promise<MarketIndicators | null> =>
+  fetchGet<MarketIndicators>('api/market/indicators');
 
 export const getEtfFlows = (): Promise<FormattedEtfFlow[]> =>
   fetchGet<FormattedEtfFlow[]>('api/market/etf-flows');

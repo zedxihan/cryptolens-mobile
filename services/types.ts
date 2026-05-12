@@ -4,11 +4,11 @@ export interface DashboardData {
     total_volume: number;
     mcap_change_percentage_24h: number;
   };
-  dominance: {
-    btc_dom: number;
-    eth_dom: number;
-    others_dom: number;
-  };
+  dominance: Array<{
+    symbol: string;
+    value: number;
+    image: string;
+  }>;
   chart: Array<{ timestamp: number; market_cap: number; volume: number }>;
 }
 
@@ -36,9 +36,14 @@ export interface FormattedTicker {
   sparkline_in_1d?: { price: number[] };
 }
 
-export interface FearGreedIndex {
-  value: number;
-  label: string;
+export interface MarketIndicators {
+  fearGreed: {
+    value: number;
+    label: string;
+  } | null;
+  altSeason: {
+    value: number;
+  } | null;
 }
 
 export interface FormattedEtfFlow {

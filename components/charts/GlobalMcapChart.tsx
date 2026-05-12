@@ -1,11 +1,11 @@
+import AreaChart from '@/components/ui/AreaChart';
 import { useGlobalMarketQuery } from '@/services/queries';
 import { formatCompact } from '@/utils/format';
 import React, { useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
-import AreaChart from '@/components/ui/AreaChart';
 
 export default function GlobalMcapChart() {
-  const [timeframe, setTimeframe] = useState<string>('30');
+  const [timeframe, setTimeframe] = useState<number>(30);
   const { data, isLoading } = useGlobalMarketQuery(timeframe);
 
   const stats = data?.global ?? null;
@@ -19,9 +19,14 @@ export default function GlobalMcapChart() {
   return (
     <View className="border-border-2 bg-surface-2 rounded-2xl border p-3">
       <View className="mb-3 flex-col gap-3">
-        <Text className="font-psemibold text-text text-lg">
-          Global Crypto Market Cap
-        </Text>
+        <View className="flex-row items-center justify-between">
+          <Text className="font-psemibold text-text text-lg">
+            Global Crypto Market Cap
+          </Text>
+          <Text className="font-pregular text-muted text-xs opacity-60">
+            by CoinGecko
+          </Text>
+        </View>
 
         <View className="flex-row items-end justify-between">
           <View className="flex-row gap-6">
@@ -38,7 +43,7 @@ export default function GlobalMcapChart() {
           </View>
 
           <View className="border-border-2 bg-surface flex-row rounded-lg border p-1">
-            {['7', '30', '365'].map((tf) => {
+            {[7, 30, 365].map((tf) => {
               const isActive = timeframe === tf;
               return (
                 <TouchableOpacity
@@ -49,7 +54,7 @@ export default function GlobalMcapChart() {
                   <Text
                     className={`font-pmedium text-xs ${isActive ? 'text-text' : 'text-muted'}`}
                   >
-                    {tf === '365' ? '1y' : `${tf}d`}
+                    {tf === 365 ? '1y' : `${tf}d`}
                   </Text>
                 </TouchableOpacity>
               );
@@ -64,10 +69,6 @@ export default function GlobalMcapChart() {
         ) : (
           <AreaChart data={chartData} dataKey="market_cap" />
         )}
-      </View>
-
-      <View className="border-border-2 mt-2 items-end border-t pt-2">
-        <Text className="font-pregular text-muted text-xs">by CoinGecko</Text>
       </View>
     </View>
   );

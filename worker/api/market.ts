@@ -10,24 +10,36 @@ const useStats = (
   routeKey: string,
   ttl: number,
 ) => {
-  c.header('Cache-Control', `public, s-maxage=${ttl}`);
+  c.header('Cache-Control', `public, max-age=${ttl}, s-maxage=${ttl}`);
   return async <T>(path: string) =>
     fetchUpstream<T>({ routeKey, path, env: c.env, customTtl: ttl });
 };
 
 // cmc
-app.get('/fear-greed', async (c) => {
+app.get('/indicators', async (c) => {
   const fetch = useStats(c, '/cmc', 10800); // 3hr
-  const res = await fetch<{
-    data: { value: string | number; value_classification: string };
-  }>('/v3/fear-and-greed/latest');
 
-  const index = res.data;
-  if (!index) return c.json(null);
+  const [fearRes, altRes] = await Promise.all([
+    fetch<{
+      data: { value: string | number; value_classification: string };
+    }>('/v3/fear-and-greed/latest'),
+    fetch<{
+      data: { altcoin_index: string | number };
+    }>('/v1/altcoin-season-index/latest'),
+  ]);
 
   return c.json({
-    value: Number(index.value),
-    label: index.value_classification,
+    fearGreed: fearRes.data
+      ? {
+          value: Number(fearRes.data.value),
+          label: fearRes.data.value_classification,
+        }
+      : null,
+    altSeason: altRes.data
+      ? {
+          value: Number(altRes.data.altcoin_index),
+        }
+      : null,
   });
 });
 
@@ -40,7 +52,7 @@ app.get('/etf-flows', async (c) => {
   const data = await Promise.all(
     ETF_SYMBOLS.map(async (asset) => {
       const [res, image] = await Promise.all([
-        fetch<{ data: SosoHistoryItem[] }>(
+        fetch<{ data: SosoHistoryItem[]; fetchedAt?: string }>(
           `/etfs/summary-history?symbol=${asset}&country_code=US`,
         ),
         resolveIcon(c, asset),
@@ -61,7 +73,7 @@ app.get('/etf-flows', async (c) => {
         image,
         netFlow: latest.value,
         date: latest.date,
-        fetchedAt: new Date().toISOString(),
+        fetchedAt: res.fetchedAt,
         history,
       };
     }),

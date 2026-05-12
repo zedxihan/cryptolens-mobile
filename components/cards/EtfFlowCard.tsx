@@ -66,7 +66,7 @@ const PaginationDots = memo(function PaginationDots({
   active: number;
 }) {
   return (
-    <View className="mt-2 flex-row items-center justify-center gap-1.5">
+    <View className="mt-1 flex-row items-center justify-center gap-1.5">
       {Array.from({ length: total }).map((_, i) => (
         <View
           key={i}

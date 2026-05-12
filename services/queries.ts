@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getDashboardData,
   getEtfFlows,
-  getFearGreedIndex,
+  getMarketIndicators,
   getPopularFour,
   getTop100Coins,
   getTopGainers,
@@ -24,7 +24,8 @@ export const useHomeCoinsQuery = () =>
       ]);
       return { trending, gainers, popular };
     },
-    gcTime: 5 * MIN,
+    staleTime: 5 * MIN,
+    gcTime: 10 * MIN,
   });
 
 // Market
@@ -71,18 +72,19 @@ export const useSearchCoinsQuery = (debouncedQuery: string) =>
   });
 
 // Global Market
-export const useGlobalMarketQuery = (timeframe: number | string = 30) =>
+export const useGlobalMarketQuery = (timeframe: number = 30) =>
   useQuery({
     queryKey: ['globalMarket', timeframe],
-    queryFn: () => getDashboardData(Number(timeframe)),
-    gcTime: 5 * MIN,
+    queryFn: () => getDashboardData(timeframe),
+    staleTime: 5 * MIN,
+    gcTime: 10 * MIN,
   });
 
-// Fear & Greed
-export const useFearGreedQuery = () =>
+// Market Indicators
+export const useMarketIndicatorsQuery = () =>
   useQuery({
-    queryKey: ['fearGreed'],
-    queryFn: getFearGreedIndex,
+    queryKey: ['marketIndicators'],
+    queryFn: getMarketIndicators,
     staleTime: 10 * MIN,
     gcTime: 15 * MIN,
   });

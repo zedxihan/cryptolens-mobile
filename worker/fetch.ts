@@ -74,5 +74,11 @@ export async function fetchUpstream<T>(options: UpstreamOptions): Promise<T> {
   if (!res.ok) {
     throw new Error(`Upstream API error (${options.routeKey}): ${res.status}`);
   }
-  return res.json() as Promise<T>;
+
+  const data = await res.json();
+  const fetchedAt = res.headers.get('Date');
+
+  return data && typeof data === 'object' && !Array.isArray(data)
+    ? { ...data, fetchedAt }
+    : data;
 }

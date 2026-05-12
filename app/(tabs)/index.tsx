@@ -1,4 +1,6 @@
+import AltseasonCard from '@/components/cards/AltSeasonCard';
 import CoinCard from '@/components/cards/CoinCard';
+import DominanceCard from '@/components/cards/DominanceCard';
 import EtfFlowCard from '@/components/cards/EtfFlowCard';
 import FearGreedCard from '@/components/cards/FearGreedCard';
 import KPIBox from '@/components/cards/KPIBox';
@@ -54,24 +56,28 @@ export default function HomeScreen() {
           <GlobalMcapChart />
         </View>
 
+        <View className="flex-row gap-3 px-3">
+          <FearGreedCard />
+          <EtfFlowCard />
+        </View>
+
         <View className="flex-col gap-3 px-3">
-          <KPIBox
-            title="Trending"
-            icon="🔥"
-            coins={trending}
-            href="/markets/trending"
-          />
           <KPIBox
             title="Top Gainers"
             icon="🚀"
             coins={gainers}
             href="/markets/gainers"
           />
+          <KPIBox
+            title="Trending"
+            icon="🔥"
+            coins={trending}
+            href="/markets/trending"
+          />
         </View>
-
         <View className="flex-row gap-3 px-3">
-          <FearGreedCard />
-          <EtfFlowCard />
+          <DominanceCard />
+          <AltseasonCard />
         </View>
       </ScrollView>
     </View>

@@ -89,7 +89,7 @@ app.get('/gainers', async (c) => {
 });
 
 // Popular
-const POPULAR = ['PAXGUSDT', 'BNBUSDT', 'AVAXUSDT', 'SUIUSDT'];
+const POPULAR = ['PAXGUSDT', 'XRPUSDT', 'BNBUSDT', 'SOLUSDT'];
 
 app.get('/popular', async (c) => {
   const fetch = useBinance(c, 21600); // 6hr
