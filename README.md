@@ -6,7 +6,7 @@
 <img src="https://img.shields.io/github/stars/zedxihan/cryptolens?style=for-the-badge&logo=github&labelColor=11140F&color=BBE9AA">
 </a>
 <a href="https://github.com/zedxihan/cryptolens/blob/main/LICENSE">
-<img src="https://img.shields.io/github/license/zedxihan/cryptolens?style=for-the-badge&logo=agplv3&labelColor=11140F&color=BBE9AA">
+<img src="https://img.shields.io/github/license/zedxihan/cryptolens?style=for-the-badge&logo=gnu&labelColor=11140F&color=BBE9AA">
 </a>
 <a href="https://github.com/zedxihan/cryptolens/commits">
 <img src="https://img.shields.io/github/last-commit/zedxihan/cryptolens?style=for-the-badge&logo=git&labelColor=11140F&color=BBE9AA">
